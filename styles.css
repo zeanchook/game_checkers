@@ -34,12 +34,12 @@
 
 .blackbckgrd
 {
-    background-color: black;
+    background-color: rgb(243, 67, 67);
 }
 
 .whitebckgrd
 {
-    background-color: grey;
+    background-color: rgb(80, 80, 251);
 }
 
 
@@ -55,4 +55,28 @@
     justify-content: center;
     flex-direction: column;
     gap: 30px;
+}
+
+.blackChess
+{
+    border-radius: 50%;
+    height: 80%;
+    width: 80%;
+    background-color: black;
+}
+
+.whiteChess
+{
+    border-radius: 50%;
+    height: 80%;
+    width: 80%;
+    background-color: white;
+}
+
+.possibleMove
+{
+    border-radius: 50%;
+    height: 80%;
+    width: 80%;
+    background-color: green;
 }
