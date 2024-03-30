@@ -6,24 +6,31 @@
     "1": "blackChess",
     "-1": "whiteChess",
   }
+  let playersTurn =
+  {
+    "1": "Player 1",
+    "-1": "Player 2"
+  }
   
   
 //   console.log(boardArrVal)
  
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 6;
-  const boardColLen = 6;
+  const boardRowLen = 7;
+  const boardColLen = 7;
 
   let prevClickRow ;
   let prevClickCol;
+
+  let jumpedOver = [];
 
   let turnVar; 
 
   /*----- cached elements  -----*/
   let bodyMain = document.querySelector("body")
   let containerDiv = document.querySelector(".container")
-
+  let containerMsgDiv = document.querySelector(".containerMsg")
   
 
   /*----- event listeners -----*/
@@ -98,10 +105,15 @@
     render();
   }
 
+  function renderMessage()
+  {
+    containerMsgDiv.innerHTML = "It is " + playersTurn[turnVar] + " turn! ";
+  }
+
   function render()
   {
     renderBoard();
-    // renderMessage();
+    renderMessage();
   }
 
 function createChildNodes (classType)
@@ -208,15 +220,22 @@ function renderBoard()
 
 }
 
-function clearPossibleMove(inputRow)
+
+
+// console.log(boardArrVal[1].includes("null"))
+
+function clearPossibleMove()
 {
-    boardArrVal
-    for(let i = 0 ; i < boardArrVal[inputRow].length ; i ++)
+    for(let i = 0 ; i < boardArrVal.length ; i ++)
     {
-        if(boardArrVal[inputRow][i] === "possibleMove")
+        for(let j = 0 ; j < boardArrVal[i].length ; j++)
         {
-            boardArrVal[inputRow][i] = "null";
+            if(boardArrVal[i][j] === "possibleMove")
+        {
+            boardArrVal[i][j] = "null";
         }
+        }
+        
     }
 }
 
@@ -230,79 +249,107 @@ function userMoves(event)
 
     
         // boardArrVal[checkerRow][checkerCol] = null;
-        
-    
-        
-    
+
     if (chkrClsClick === "possibleMove")
     {
+        let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
+        let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
+
+        console.log ("removed checker row col: ",removeCheckerRow,removeCheckerCol)
+        console.log("previous click: ",prevClickRow,prevClickCol)
+
         boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
+
+        if (boardArrVal[removeCheckerRow][removeCheckerCol] === checkersProperty[turnVar * -1])
+        {
+            console.log(boardArrVal[removeCheckerRow][removeCheckerCol])
+            boardArrVal[removeCheckerRow][removeCheckerCol] = "null"
+        } 
+
         boardArrVal[prevClickRow][prevClickCol] = "null"
-        clearPossibleMove(chkrRowClick);
+        
+        
+        // boardArrVal[removeCheckerRow][removeCheckerCol] = "null"
+        clearPossibleMove();
+        turnVar *= -1;
     }
         
     // console.log("here",turnVar)
     if(chkrClsClick === checkersProperty[turnVar])
     {
+        boardArrVal.forEach( x => x.includes("possibleMove") ? clearPossibleMove() : 0)
         computePosMoves(turnVar,chkrRowClick,chkrColClick)
-        console.log(checkersProperty[turnVar],turnVar)
-        turnVar *= -1;
     }
 
-    
+    console.log("rendered")
     render()
 }
 
 function computePosMoves (turns,row,col)
 {
-    let rowMath;
-    turns === 1 ? rowMath = -1 : rowMath = 1;
+    let rowForwardBackward;
+    turns === 1 ? rowForwardBackward = -1 : rowForwardBackward = 1;
     
 
     for(let i = -1 ; i < 2 ; i++)
     {
 
+        // left right
         let currentCol = col + i;
+        let currentRow = row + rowForwardBackward;
+        let backgroundBoard = 
 
-        currentCol > (boardColLen-1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
+        currentCol > (boardColLen - 1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
                 
-        
-        console.log("current row: ",row+rowMath)
-        console.log("current column: ",currentCol)
-        
-        console.log("class name ahead: ",containerDiv.children[row + rowMath].children[currentCol].className)
-
+        console.log("current :", currentRow, currentCol)
     
-        if (! containerDiv.children[row + rowMath].children[currentCol].className.includes("blackbckgrd"))
+        if (! containerDiv.children[currentRow].children[currentCol].className.includes("blackbckgrd"))
         {
-            console.log(boardArrVal[row + rowMath][currentCol])
             
 
-            let checkerPosMove = (boardArrVal[row + rowMath][currentCol])
-            console.log("tempVar: ",checkerPosMove)
+            let checkerPosMove = (boardArrVal[currentRow][currentCol])
+            console.log("checkerPosMove: ",checkerPosMove)
+
+            let currentVale = "" + checkersProperty[turnVar * -1];
+            console.log(currentVale)
+
             switch (checkerPosMove)
             {
                 case "null":
-                    boardArrVal[row + rowMath][currentCol] = "possibleMove"
+                    boardArrVal[currentRow][currentCol] = "possibleMove"                  
                     break;
                 
                 
-                case checkersProperty[1]:
-                    console.log("current property is :",checkersProperty[1])
-                    console.log("inside this: ",row + rowMath,currentCol)
+                case currentVale:
 
-                    // computePosMoves(turnVar,(row + rowMath + prevClickRow),(currentCol + prevClickCol))
+                    console.log("current property is :",checkersProperty[turnVar])
+                    // console.log("inside this: ",currentRow,currentCol)
+                    // console.log("original: ", row,col)
+
+                    let jumpRow = currentRow + (currentRow - row)
+                    let jumpCol = currentCol + (currentCol - col)
+
+                   if (jumpRow <= (boardRowLen-1) && jumpCol <= (boardColLen-1))
+                   {
+                        console.log("jump row and col: ",jumpRow,jumpCol)
+                
+                        if(boardArrVal[jumpRow][jumpCol] === "null")
+                        {
+                            boardArrVal[jumpRow][jumpCol] = "possibleMove"   
+                            jumpedOver.push([currentRow, currentCol])
+                        }
+                   }
+                    
                     break;
                 
             }
         }
-       
-            prevClickRow = row
-            prevClickCol = col          
+        prevClickRow = row
+        prevClickCol = col    
     }
    
+// }
+
 }
-
-
 
 
