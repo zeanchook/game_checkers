@@ -1,11 +1,10 @@
   /*----- constants -----*/
   const rowMAX = 10;
   const colMAX = 10;
-  let checkersColor = 
+  let checkersProperty = 
   {
-    "1": "black",
-    "-1": "white",
-    "0": "yellow"
+    "1": "blackChess",
+    "-1": "whiteChess",
   }
   
   
@@ -13,68 +12,41 @@
  
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 8;
-  const boardColLen = 8;
+  const boardRowLen = 6;
+  const boardColLen = 6;
 
   let prevClickRow ;
-        let prevClickCol;
+  let prevClickCol;
 
-  
-
+  let turnVar; 
 
   /*----- cached elements  -----*/
   let bodyMain = document.querySelector("body")
   let containerDiv = document.querySelector(".container")
 
+  
+
   /*----- event listeners -----*/
+  containerDiv.addEventListener( ("click"),userMoves)
+  
+
 
 
   /*----- functions -----*/
   init()
 
-  let checker = containerDiv
-  console.log(checker)
-  checker.addEventListener( ("click"),x =>
-    {
-        let checkerClassName = x.target.className
-        let checkerRow = parseInt(x.target.getAttribute("row"))
-        let checkerCol = parseInt(x.target.getAttribute("col"))
-        
-
-        console.log(checkerRow,checkerCol,checkerClassName)
-
-        if(checkerClassName === "whiteChess")
-        {
-            // boardArrVal[checkerRow][checkerCol] = null;
-            
-            for(let i = -1;i < 2;i++)
-            {
-                if (( boardArrVal[checkerRow+1][checkerCol+i] === "null") && ! containerDiv.children[checkerRow+1].children[checkerCol+i].className.includes("blackbckgrd"))
-                {
-                    boardArrVal[checkerRow+1][checkerCol+i] = "possibleMove"
-                }
-                prevClickRow = checkerRow
-                prevClickCol = checkerCol
-                
-            }
-            
-        }
-        else if (checkerClassName === "possibleMove")
-        {
-            
-
-
-            boardArrVal[checkerRow][checkerCol] = boardArrVal[prevClickRow][prevClickCol]
-            boardArrVal[prevClickRow][prevClickCol] = "null"
-            clearPossibleMove(checkerRow);
-        }
-
-        render()
-    })
 
 
   function init()
   {
+    let checkersLength = containerDiv.children.length
+    if (checkersLength !== 0 )
+    {
+        for(let i = 0 ; i < checkersLength ; i++)
+        {
+            containerDiv.children[0].remove()
+        }
+    }
     initBoard();
 
     // create row first
@@ -92,38 +64,36 @@
         for(let col = 0 ; col < boardColLen; col++)
         {
             let createMainDivCol = document.createElement("div");
-            let createMainDivColClassName = "col";
+            let backgroundName;
             if(row % 2 === 0)
             {   
                 if(col % 2 === 0)
                 {
-                    createMainDivCol.setAttribute("class",concatNames(createMainDivColClassName,"blackbckgrd"));
-                    
+                    backgroundName = "blackbckgrd";
                 }
                 else
                 {
-                    createMainDivCol.setAttribute("class",concatNames(createMainDivColClassName,"whitebckgrd"));
-                             
+                    backgroundName = "whitebckgrd";                           
                 }    
             }
             else
             {
                 if(col % 2 !== 0)
                 {
-                    createMainDivCol.setAttribute("class",concatNames(createMainDivColClassName,"blackbckgrd"));    
+                    backgroundName = "blackbckgrd";
                 }
                 else
                 {
-                    createMainDivCol.setAttribute("class",concatNames(createMainDivColClassName,"whitebckgrd"));   
-                    
+                    backgroundName = "whitebckgrd";                   
                 }     
             }
+            createMainDivCol.setAttribute("class",concatNames("col",backgroundName));
             createCheckers(row,col,createMainDivCol); 
             containerDiv.childNodes[row].append(createMainDivCol);   
         }  
     }
 
-    
+    turnVar = 1;
     initBoard2();
     render();
   }
@@ -248,6 +218,88 @@ function clearPossibleMove(inputRow)
             boardArrVal[inputRow][i] = "null";
         }
     }
+}
+
+function userMoves(event)
+{
+    let chkrClsClick = event.target.className
+    let chkrRowClick = parseInt(event.target.getAttribute("row"))
+    let chkrColClick = parseInt(event.target.getAttribute("col"))
+    // console.log(chkrRowClicked,chkrColClicked,chkrClsClicked)
+    
+
+    
+        // boardArrVal[checkerRow][checkerCol] = null;
+        
+    
+        
+    
+    if (chkrClsClick === "possibleMove")
+    {
+        boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
+        boardArrVal[prevClickRow][prevClickCol] = "null"
+        clearPossibleMove(chkrRowClick);
+    }
+        
+
+    
+
+
+    // console.log("here",turnVar)
+    if(chkrClsClick === checkersProperty[turnVar])
+    {
+
+            computePosMoves(turnVar,chkrRowClick,chkrColClick)
+
+        turnVar *= -1;
+    }
+
+    
+    render()
+}
+
+    
+        
+    // console.log(1===1 ? 3 : 2)
+console.log(checkersProperty[-1],turnVar)
+
+function computePosMoves (turns,row,col)
+{
+    let rowMath;
+    turns === 1 ? rowMath = -1 : rowMath = 1;
+    
+
+    for(let i = -1 ; i < 2 ; i++)
+    {
+        // console.log(containerDiv.children[row + rowMath].children[col + i].className)
+
+        let currentCol = col + i;
+
+        currentCol > (boardColLen-1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
+
+    
+        if (! containerDiv.children[row + rowMath].children[currentCol].className.includes("blackbckgrd"))
+        {
+            console.log(boardArrVal[row + rowMath][currentCol])
+            // if ((boardArrVal[row + rowMath][col + i] === "null"))
+            // {
+                
+            // }
+
+
+            let tempVar = (boardArrVal[row + rowMath][currentCol])
+            switch (tempVar)
+            {
+                case "null":
+                    boardArrVal[row + rowMath][currentCol] = "possibleMove"
+                    break;
+            }
+        }
+       
+            prevClickRow = row
+            prevClickCol = col          
+    }
+   
 }
 
 
