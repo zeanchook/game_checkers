@@ -241,27 +241,17 @@ function userMoves(event)
         clearPossibleMove(chkrRowClick);
     }
         
-
-    
-
-
     // console.log("here",turnVar)
     if(chkrClsClick === checkersProperty[turnVar])
     {
-
-            computePosMoves(turnVar,chkrRowClick,chkrColClick)
-
+        computePosMoves(turnVar,chkrRowClick,chkrColClick)
+        console.log(checkersProperty[turnVar],turnVar)
         turnVar *= -1;
     }
 
     
     render()
 }
-
-    
-        
-    // console.log(1===1 ? 3 : 2)
-console.log(checkersProperty[-1],turnVar)
 
 function computePosMoves (turns,row,col)
 {
@@ -271,28 +261,39 @@ function computePosMoves (turns,row,col)
 
     for(let i = -1 ; i < 2 ; i++)
     {
-        // console.log(containerDiv.children[row + rowMath].children[col + i].className)
 
         let currentCol = col + i;
 
         currentCol > (boardColLen-1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
+                
+        
+        console.log("current row: ",row+rowMath)
+        console.log("current column: ",currentCol)
+        
+        console.log("class name ahead: ",containerDiv.children[row + rowMath].children[currentCol].className)
 
     
         if (! containerDiv.children[row + rowMath].children[currentCol].className.includes("blackbckgrd"))
         {
             console.log(boardArrVal[row + rowMath][currentCol])
-            // if ((boardArrVal[row + rowMath][col + i] === "null"))
-            // {
-                
-            // }
+            
 
-
-            let tempVar = (boardArrVal[row + rowMath][currentCol])
-            switch (tempVar)
+            let checkerPosMove = (boardArrVal[row + rowMath][currentCol])
+            console.log("tempVar: ",checkerPosMove)
+            switch (checkerPosMove)
             {
                 case "null":
                     boardArrVal[row + rowMath][currentCol] = "possibleMove"
                     break;
+                
+                
+                case checkersProperty[1]:
+                    console.log("current property is :",checkersProperty[1])
+                    console.log("inside this: ",row + rowMath,currentCol)
+
+                    // computePosMoves(turnVar,(row + rowMath + prevClickRow),(currentCol + prevClickCol))
+                    break;
+                
             }
         }
        
