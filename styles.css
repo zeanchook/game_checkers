@@ -1,16 +1,16 @@
-.container
+.gamepage
 {
     /* width: 50px;
     height: 50px; */
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 400px;
     display: flex;
     flex-direction: column;
     align-content: center;
     justify-content: center;
 }
 
-.container .row
+.gamepage .row
 {
     width: 100%;
     height: 10%;
@@ -20,7 +20,7 @@
 
 }
 
-.container .row .col
+.gamepage .row .col
 {
     width: 10%;
     height: 100%;
@@ -84,13 +84,38 @@
     background-color: rgb(149, 240, 149);
 }
 
-.containerMsg
+.gamepageMsg
 {
     display: flex;
     align-items: end;
+    font-size: 30px;
 }
 
 body
 {
     background-color: rgb(223, 123, 123);
 }
+
+.startpage
+{ 
+    /* background-size: auto;
+    height: 500px;
+    width: 500px;
+    align-items: center; 
+    background-position: center; */
+ }
+
+ .space
+ {
+    margin: 100px;
+ }
+
+ .isKing
+ {
+    border-radius: 60%;
+    border-style: solid;
+    border-color: white;
+    height: 70%;
+    width: 70%;
+    background-color: gold;
+ }
