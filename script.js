@@ -16,16 +16,14 @@
    
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 6;
-  const boardColLen = 6;
+  const boardRowLen = 10;
+  const boardColLen = 10;
   let removeBefore = 0;
   let prevClickRow ;
   let prevClickCol;
   let numOfCheckers = {};
+  let playersMove = {};
   let winner;
-
-//   let possibleMoveArr = [];
-
   let jumpedOver = [];
 
   let turnVar; 
@@ -115,12 +113,17 @@ function renderMessage()
         Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
         gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
     }
-    else
+    else if (Math.abs(winner) === 1)
     {
-        turnIdx = turnVar;
-        Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
-        gamePageMsgDiv.innerHTML = "Winner is " + playersTurn[turnIdx] + " !";
+        console.log("did it go here?")
+        // turnIdx = winner;
+        // Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
+        gamePageMsgDiv.innerHTML = "Winner is " + playersTurn[winner] + " !";
     }
+    else if (winner === "Tie ! ")
+    {
+        gamePageMsgDiv.innerHTML = "Its a Tie !";
+    }   
 
 }
 
@@ -128,6 +131,7 @@ function render()
 {
 renderBoard();
 renderPieces();
+winner = getWinner();
 renderMessage();
 }
 
@@ -324,7 +328,6 @@ function userMoves(event)
     }
     
     render()
-    winner = getWinner();
 }
 
 function computePosMoves (turns,row,col,kingsMove)
@@ -384,6 +387,9 @@ function computePosMoves (turns,row,col,kingsMove)
                     boardArrVal[curRow][curCol] = "possibleMove" 
                     // possibleMoveArr.push([curRow,curCol])
                     possibleMove = 1
+                    console.log("curRow, curCol: ",curRow,curCol)
+                    console.log("why it go here?")
+                    console.log(turnVar)
                 }
 
                 else if (checkerPosMove === normalCheckers ||checkerPosMove === kingCheckers)
@@ -427,82 +433,92 @@ function checkMinMax (inputVal,len)
 function renderPieces()
 {
     for(let o in checkersProperty)
-{
-   console.log(checkersProperty[o])
-   numOfCheckers[checkersProperty[o]] = 0
-   for(let i = 0 ; i<boardArrVal.length;i++)
-   {
-    for(let j = 0 ; j < boardArrVal[i].length;j++)
     {
-        if(boardArrVal[i][j] === checkersProperty[o])
+    numOfCheckers[checkersProperty[o]] = 0
+    for(let i = 0 ; i<boardArrVal.length;i++)
+    {
+        for(let j = 0 ; j < boardArrVal[i].length;j++)
         {
-            numOfCheckers[checkersProperty[o]] += 1;
+            if(boardArrVal[i][j] === checkersProperty[o])
+            {
+                numOfCheckers[checkersProperty[o]] += 1;
+            }
         }
-    }
    }
-}
+    }
 }
 
 function getWinner()
 {
     let piecesLeft = {}
-    for(let o in checkersProperty)
+    for(let items in checkersProperty) 
     {
-    
-        (Math.abs(o) === 2) ? idx = o/2 : idx = o 
-        // console.log(piecesLeft[idx])
-        if (piecesLeft[idx] === undefined)
+        (Math.abs(items) === 2) ? idx = items / 2 : idx = items 
+        piecesLeft[idx] === undefined ? piecesLeft[idx] = 0 : 0
+        piecesLeft[idx]  += numOfCheckers[checkersProperty[items]]
+    }
+
+    for(let y in piecesLeft)
+    {
+        if(piecesLeft[y] === 0)
         {
-            piecesLeft[idx] = 0
+            // console.log("Pieces left: ",piecesLeft[y])
+            return (y*-1)
         }
-        piecesLeft[idx]  += numOfCheckers[checkersProperty[o]]
-        console.log(numOfCheckers[checkersProperty[o]])
-    
     }
-        console.log(piecesLeft)
-        return "null"
+
+    let player1Turn = 0;
+    
+    for(let item in numOfCheckers)
+    {
+        
+        numOfCheckers[item]
+        boardArrVal.forEach((rows,rowsIdx) =>
+            {
+                rows.forEach((cols,colsIdx) =>
+                    {
+                        if (boardArrVal[rowsIdx][colsIdx] === item && numOfCheckers[item] !== 0 && boardArrVal[rowsIdx][colsIdx] === checkersProperty[turnVar*-1])
+                        {
+                            player1Turn += computePosMoves(turnVar*-1,rowsIdx,colsIdx,0)
+                            playersMove[turnVar*-1] = player1Turn;
+                            clearPossibleMove()
+                        }
+                    })
+            })
     }
     
-   
-    // if (numOfCheckers[])
-
-
-//    if (chances !== 0 )
-//    {
-//     clearPossibleMove();
+    if (playersMove[turnVar*-1] === 0 && playersMove[turnVar] === 0)
+    {
+        return "Tie ! "
+    }
+    else if (playersMove[turnVar*-1] === 0 && playersMove[turnVar] !== 0)
+    {
+        return (turnVar)
+    }   
+    else if (playersMove[turnVar*-1] !== 0 && playersMove[turnVar] === 0)
+    {
+        return (turnVar*-1)
+    }
     
-//    }
-//    else{
-//     clearPossibleMove();
-//     return (turnVar*-1)
-//    }
+    return "null"
+}
 
-   
-   
+console.log("winner",winner)
+
+
+
+
+
     
-    // computePosMoves (turnVar,row,col,0)
-    // computePosMoves (turnVar,row,col,1)
+   
+   
 
 
 
 
 
 
-// for(let i = 0 ; i < boardArrVal.length; i ++)
-//    {
-//     for(let j = 0 ; j < boardArrVal[i].length ; j++)
-//     {
-//         if (boardArrVal[i][j] === checkersProperty[turnVar])
-//         {
-//             console.log("into here?")
-//             if (computePosMoves (turnVar,i,j,0) === 1)
-//                 {
-//                     chances ++;
-                    
-//                 }
-//         }
-//     }
-//    }
+
 
 
 
