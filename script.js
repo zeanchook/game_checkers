@@ -5,6 +5,8 @@
   {
     "1": "blackChess",
     "-1": "whiteChess",
+    "2": "blackChessisKing",
+    "-2": "whiteChessisKing",
   }
   let playersTurn =
   {
@@ -107,7 +109,9 @@
 
   function renderMessage()
   {
-    gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnVar] + " turn! ";
+    let turnIdx = turnVar;
+    Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
+    gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
   }
 
   function render()
@@ -180,16 +184,7 @@ function initBoard()
 
 function initBoard2()
 {
-//     for(let i =0; i < boardArrVal.length;i++)
-//     {
-//     for(let j = 0; j < boardArrVal[i].length;j++)
-//     {
-//         if (boardArrVal[i][j] === undefined)
-//         {
-//             boardArrVal[i][j] = "null";
-//         }
-//     }
-// }
+
 boardArrVal.forEach(row => {
     row.forEach((cell, index, arr) => {
         if (cell === undefined) {
@@ -243,19 +238,42 @@ function userMoves(event)
     let chkrClsClick = event.target.className
     let chkrRowClick = parseInt(event.target.getAttribute("row"))
     let chkrColClick = parseInt(event.target.getAttribute("col"))
-    // console.log(chkrRowClicked,chkrColClicked,chkrClsClicked)
-    
+    let kingMoves = 0;
 
-    
-        // boardArrVal[checkerRow][checkerCol] = null;
+    if(boardArrVal[chkrRowClick][chkrColClick].includes("isKing"))
+    {
+        // let kingProperty = boardArrVal[chkrRowClick][chkrColClick].split(checkersProperty[turnVar])[1]
+        // let checkersPropertyLeft = boardArrVal[chkrRowClick][chkrColClick].split(checkersProperty[turnVar])[0]
 
+        // kingProperty === "isKing" ? kingMoves = 1 : kingMoves = 0;
+        console.log("clicked:",boardArrVal[chkrRowClick][chkrColClick])
+        turnVar *= 2;
+        if(turnVar > 2)
+        {
+            turnVar = 2;
+        }
+        else if(turnVar < -2 )
+        {
+            turnVar = -2;
+        }
+        
+    }
+    else if (!boardArrVal[chkrRowClick][chkrColClick].includes("isKing"))
+    {
+        console.log("go in here?")
+        if (Math.abs(turnVar) === 2)
+        {
+            console.log("go in here? or here")
+            turnVar /=2;
+        }
+        
+    }
+    console.log("turnvar:",turnVar)
     if (chkrClsClick === "possibleMove")
     {
         removeBefore = 0;
         let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
         let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
-        
-    
         console.log ("removed checker row col: ",removeCheckerRow,removeCheckerCol)
         console.log("previous click: ",prevClickRow,prevClickCol)
 
@@ -263,8 +281,10 @@ function userMoves(event)
        {
         if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
         {
-            console.log("removed row:",removeCheckerRow,removeCheckerCol)
-            console.log("jumped over row:",jumpedOver[i][0],jumpedOver[i][1])
+            if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1])
+            {
+                boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
+            } 
             delete jumpedOver[i];
             jumpedOver.pop()
             removeBefore = 1;
@@ -273,29 +293,25 @@ function userMoves(event)
 
         boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
 
-        if (boardArrVal[removeCheckerRow][removeCheckerCol] === checkersProperty[turnVar * -1])
-        {
-            console.log(boardArrVal[removeCheckerRow][removeCheckerCol])
-            boardArrVal[removeCheckerRow][removeCheckerCol] = "null"
-        } 
-
         boardArrVal[prevClickRow][prevClickCol] = "null"
-        
         clearPossibleMove();
         jumpedOver = [];
-
         prevClickRow = chkrRowClick;
         prevClickCol = chkrColClick;
 
 
         if((chkrRowClick === boardRowLen - 1) && boardArrVal[chkrRowClick][chkrColClick] === "whiteChess")
         {
-            console.log("no?")
             console.log(chkrRowClick,chkrColClick)
-            boardArrVal[chkrRowClick][chkrColClick] += " isKing"
+            boardArrVal[chkrRowClick][chkrColClick] += "isKing"
+        }
+        else if ((chkrRowClick === 0) && boardArrVal[chkrRowClick][chkrColClick] === "blackChess")
+        {
+            console.log(chkrRowClick,chkrColClick)
+            boardArrVal[chkrRowClick][chkrColClick] += "isKing"
         }
 
-
+        //compute possible move agn
         if (removeBefore)
         {
             computePosMoves(turnVar,chkrRowClick,chkrColClick,1) === 0 ? turnVar *= -1 : turnVar
@@ -307,9 +323,7 @@ function userMoves(event)
             console.log("here2")
             turnVar *= -1;
         }
-        // }
         
-    
     }
         
     // console.log("here",turnVar)
