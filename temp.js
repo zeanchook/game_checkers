@@ -5,6 +5,8 @@
   {
     "1": "blackChess",
     "-1": "whiteChess",
+    "2": "blackChessisKing",
+    "-2": "whiteChessisKing",
   }
   let playersTurn =
   {
@@ -14,8 +16,10 @@
    
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 10;
-  const boardColLen = 10;
+  const boardRowLen = 6;
+  const boardColLen = 6;
+
+  let removeBefore = 0;
 
   let prevClickRow ;
   let prevClickCol;
@@ -103,16 +107,18 @@
     render();
   }
 
-  function renderMessage()
-  {
-    gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnVar] + " turn! ";
-  }
+function renderMessage()
+{
+let turnIdx = turnVar;
+Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
+gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
+}
 
-  function render()
-  {
-    renderBoard();
-    renderMessage();
-  }
+function render()
+{
+renderBoard();
+renderMessage();
+}
 
 function createChildNodes (classType)
 {
@@ -166,7 +172,6 @@ function createCheckers (currentRowVal,col,parentDiv)
 function initBoard()
 {
     boardArrVal.length = boardRowLen;
-  
     for(let i = 0 ; i < boardArrVal.length;i++)
     {
         boardArrVal[i] = [];
@@ -178,16 +183,6 @@ function initBoard()
 
 function initBoard2()
 {
-//     for(let i =0; i < boardArrVal.length;i++)
-//     {
-//     for(let j = 0; j < boardArrVal[i].length;j++)
-//     {
-//         if (boardArrVal[i][j] === undefined)
-//         {
-//             boardArrVal[i][j] = "null";
-//         }
-//     }
-// }
 boardArrVal.forEach(row => {
     row.forEach((cell, index, arr) => {
         if (cell === undefined) {
@@ -200,32 +195,19 @@ boardArrVal.forEach(row => {
 
 function renderBoard()
 {
-    
     let containerDivRowLevel = gamePageDiv.children
-    // console.log(containerDivRowLevel[0].children[3])
-
     for(let i = 0 ; i < containerDivRowLevel.length ; i++)
     {
-        // console.log(`row: ${i}`,containerDivRowLevel[i])
-
         for(let j = 0 ; j < containerDivRowLevel[i].childElementCount; j++)
         {
-            // console.log(`row: ${i} col: ${j}`,containerDivRowLevel[i].children[j],boardArrVal[i][j])
-
             if (containerDivRowLevel[i].children[j].hasChildNodes())
             {
-                // console.log("true")
-                // console.log(`row: ${i} col: ${j}`,containerDivRowLevel[i].children[j],boardArrVal[i][j])
                 containerDivRowLevel[i].children[j].children[0].setAttribute("class",boardArrVal[i][j])
-            }
-            
+            }          
         }
     }
-    // console.log(containerDivRowLevel[0].children[3].children[0])
-
 }
 
-// console.log(boardArrVal[1].includes("null"))
 
 function clearPossibleMove()
 {
@@ -248,138 +230,183 @@ function userMoves(event)
     let chkrClsClick = event.target.className
     let chkrRowClick = parseInt(event.target.getAttribute("row"))
     let chkrColClick = parseInt(event.target.getAttribute("col"))
-    // console.log(chkrRowClicked,chkrColClicked,chkrClsClicked)
-    
+    let kingMoves = 0;
 
-    
-        // boardArrVal[checkerRow][checkerCol] = null;
+    if(boardArrVal[chkrRowClick][chkrColClick] === checkersProperty[2] || boardArrVal[chkrRowClick][chkrColClick] === checkersProperty[-2])
+    {
+        turnVar *= 2;
+        if(turnVar > 2)
+        {
+            turnVar = 2;
+        }
+        else if(turnVar < -2 )
+        {
+            turnVar = -2;
+        }
+        kingMoves = 1;
+        
+    }
 
+    else if (boardArrVal[chkrRowClick][chkrColClick] !== checkersProperty[2] && boardArrVal[chkrRowClick][chkrColClick] !== checkersProperty[2])
+    {
+        if (Math.abs(turnVar) === 2)
+        {
+            turnVar /=2;
+            kingMoves = 0;
+        }
+        
+    }
+
+    console.log("turnvar:",turnVar)
     if (chkrClsClick === "possibleMove")
     {
+        removeBefore = 0;
         let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
         let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
-
-        console.log ("removed checker row col: ",removeCheckerRow,removeCheckerCol)
-        console.log("previous click: ",prevClickRow,prevClickCol)
+        
+       for(let i = 0; i < jumpedOver.length;i++)
+       {
+        if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
+        {
+            if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1])
+            {
+                boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
+            } 
+            delete jumpedOver[i];
+            jumpedOver.pop()
+            removeBefore = 1;
+        }
+       }
 
         boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
-
-        if (boardArrVal[removeCheckerRow][removeCheckerCol] === checkersProperty[turnVar * -1])
-        {
-            console.log(boardArrVal[removeCheckerRow][removeCheckerCol])
-            boardArrVal[removeCheckerRow][removeCheckerCol] = "null"
-        } 
-
         boardArrVal[prevClickRow][prevClickCol] = "null"
-        
-        
-        // boardArrVal[removeCheckerRow][removeCheckerCol] = "null"
         clearPossibleMove();
-        turnVar *= -1;
+        jumpedOver = [];
+        prevClickRow = chkrRowClick;
+        prevClickCol = chkrColClick;
+
+
+        if((chkrRowClick === boardRowLen - 1) && boardArrVal[chkrRowClick][chkrColClick] === "whiteChess")
+        {
+            boardArrVal[chkrRowClick][chkrColClick] += "isKing"
+        }
+        else if ((chkrRowClick === 0) && boardArrVal[chkrRowClick][chkrColClick] === "blackChess")
+        {
+            boardArrVal[chkrRowClick][chkrColClick] += "isKing"
+        }
+
+        //compute possible move agn
+        if (removeBefore)
+        {
+            console.log("kings move is ?",kingMoves)
+            computePosMoves(turnVar,chkrRowClick,chkrColClick,1) === 0 ? turnVar *= -1 : turnVar
+            turnVar = turnVar;
+        }
+        else
+        {
+            turnVar *= -1;
+        }
+        
     }
         
-    // console.log("here",turnVar)
-    if(chkrClsClick === checkersProperty[turnVar])
+    if (chkrClsClick === checkersProperty[turnVar])
     {
         boardArrVal.forEach( x => x.includes("possibleMove") ? clearPossibleMove() : 0)
         prevClickRow = chkrRowClick;
         prevClickCol = chkrColClick;
+        // console.log("kings move iss ?",kingMoves)
+        // console.log("turnvar:",turnVar)
         computePosMoves(turnVar,chkrRowClick,chkrColClick,0)
     }
-
-    // console.log("rendered")
+   
     render()
 }
 
-function computePosMoves (turns,row,col,recurCall)
+function computePosMoves (turns,row,col,kingsMove)
 {
     let rowForwardBackward;
     turns === 1 ? rowForwardBackward = -1 : rowForwardBackward = 1;
 
+    // let turns = 2;
+    let length = 1;
+    let initial = -1;
+
+    if (Math.abs(turns) === 2)
+    {
+        length = 2;
+        initial = -1;
+    }
+    else if (turns === 1)
+    {
+        length = 0;
+        initial = -1;
+    }
+    else if (turns === -1)
+    {
+        length = 2;
+        initial = 1;
+    }
+
+    for(let j = initial ; j < length ; j++)    
+    {
+        console.log(turns,rowForwardBackward)
+        console.log("possivbl:",j)
+    }
+
+
+    let possibleMove = 0;
     for(let i = -1 ; i < 2 ; i++)
     {
         let insidePreviousClickRol = row
         let insidePreviousClickCol = col
-
         let currentCol = col + i;
         let currentRow = row + rowForwardBackward;
         currentCol > (boardColLen - 1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
-        console.log("Current Col: ",currentRow,currentCol)
+        currentRow > (boardRowLen - 1) ? currentRow = (boardRowLen - 1): currentRow < 0 ? currentRow = 0 : currentRow
 
-        let directionPosMovesCol = currentCol - prevClickCol;
-        let directionPosMovesRow = currentRow - prevClickRow;
 
-        // console.log("Direction: ",col-prevClickCol)
         if (! gamePageDiv.children[currentRow].children[currentCol].className.includes("blackbckgrd"))
         {
             let checkerPosMove = (boardArrVal[currentRow][currentCol])
             let currentVale = "" + checkersProperty[turnVar * -1];
 
-            if (checkerPosMove === "null" && recurCall === 0)
+            if (checkerPosMove === "null" && kingsMove === 0)
             {
                 boardArrVal[currentRow][currentCol] = "possibleMove" 
-                possibleMoveArr.push([currentRow,currentCol])     
+                possibleMoveArr.push([currentRow,currentCol])
             }
 
             else if (checkerPosMove === currentVale)
             {
-                console.log("black chess infron: ", currentRow,currentCol)
-                console.log("Direction: row x col",directionPosMovesRow,directionPosMovesCol)
+                
                 jumpedOver.push([currentRow,currentCol])
-                // console.log(jumpedOver)
-                // console.log("compute direction and future moves: ",currentRow + directionPosMovesRow,currentCol + directionPosMovesCol) ***
-
-                // let computeFutureMovesRol = currentRow + directionPosMovesRow;
-                // let computeFutureMovesCol = currentCol + directionPosMovesCol;
-
                 let computeFutureMovesRol = currentRow + (currentRow - insidePreviousClickRol);
                 let computeFutureMovesCol = currentCol + (currentCol - insidePreviousClickCol);
 
-                // console.log("New compute direction and future moves: ",computeFutureMovesRol,computeFutureMovesCol) ***
-
-                // if (computeFutureMovesRol > (boardRowLen - 1))
-                // {
-                //     computeFutureMovesRol = (boardRowLen - 1)
-                // }
-                // else if (computeFutureMovesRol < 0)
-                // {
-                //     computeFutureMovesRol = 0
-                // }
-
-                // if (computeFutureMovesCol > (boardColLen - 1))
-                // {
-                //     computeFutureMovesCol = (boardColLen - 1)
-                // }
-                // else if (computeFutureMovesCol < 0)
-                // {
-                //     computeFutureMovesCol = 0
-                // }
-
                 if ((computeFutureMovesRol <= (boardRowLen - 1) && computeFutureMovesRol >= 0) && (computeFutureMovesCol <= (boardColLen - 1) && computeFutureMovesCol >= 0))
                 {
-                    // console.log("computeFutureMoves: ",computeFutureMovesRol,computeFutureMovesCol) ***
-                    computeDirection (computeFutureMovesRol,computeFutureMovesCol)
-                    // console.log("prev",prevClickRow,prevClickCol) ***
-                    if(computeFutureMovesRol!== boardRowLen-1 && computeFutureMovesCol !== boardColLen-1)
-                    {
-                        computePosMoves (turnVar,computeFutureMovesRol,computeFutureMovesCol,1)
-                    }
+                    computeDirection (computeFutureMovesRol,computeFutureMovesCol) === true ? possibleMove =1 : possibleMove = 0;
+                    
                 }
-                
                 
             }   
         }        
     }
+    return possibleMove;
+
 }
 
 function computeDirection (rows,cols)
 {
-    console.log("compute Pos moves : ",rows,cols)
     if(boardArrVal[rows][cols] === "null")
     {
         boardArrVal[rows][cols] = "possibleMove"
-        possibleMoveArr.push([rows,cols])   
-        // possibleMoveArr.push([rows][cols])
+        possibleMoveArr.push([rows,cols])
+        return true;   
     }
+    
+    return false;
 }
+
+
 

@@ -18,13 +18,13 @@
   let boardArrVal = [];
   const boardRowLen = 6;
   const boardColLen = 6;
-
   let removeBefore = 0;
-
   let prevClickRow ;
   let prevClickCol;
+  let numOfCheckers = {};
+  let winner;
 
-  let possibleMoveArr = [];
+//   let possibleMoveArr = [];
 
   let jumpedOver = [];
 
@@ -34,7 +34,6 @@
   let bodyMain = document.querySelector("body")
   let gamePageDiv = document.querySelector(".gamepage")
   let gamePageMsgDiv = document.querySelector(".gamepageMsg")
-
   let startPageDiv = document.querySelector(".startpage")
 
   
@@ -101,24 +100,36 @@
             gamePageDiv.childNodes[row].append(createMainDivCol);   
         }  
     }
-
+    winner = "null"
     turnVar = 1;
     initBoard2();
     render();
   }
 
-  function renderMessage()
-  {
-    let turnIdx = turnVar;
-    Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
-    gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
-  }
+function renderMessage()
+{
+    let turnIdx;
+    if(winner === "null")
+    {
+        turnIdx = turnVar;
+        Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
+        gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
+    }
+    else
+    {
+        turnIdx = turnVar;
+        Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
+        gamePageMsgDiv.innerHTML = "Winner is " + playersTurn[turnIdx] + " !";
+    }
 
-  function render()
-  {
-    renderBoard();
-    renderMessage();
-  }
+}
+
+function render()
+{
+renderBoard();
+renderPieces();
+renderMessage();
+}
 
 function createChildNodes (classType)
 {
@@ -172,7 +183,6 @@ function createCheckers (currentRowVal,col,parentDiv)
 function initBoard()
 {
     boardArrVal.length = boardRowLen;
-  
     for(let i = 0 ; i < boardArrVal.length;i++)
     {
         boardArrVal[i] = [];
@@ -184,7 +194,6 @@ function initBoard()
 
 function initBoard2()
 {
-
 boardArrVal.forEach(row => {
     row.forEach((cell, index, arr) => {
         if (cell === undefined) {
@@ -197,23 +206,18 @@ boardArrVal.forEach(row => {
 
 function renderBoard()
 {
-    
     let containerDivRowLevel = gamePageDiv.children
-
     for(let i = 0 ; i < containerDivRowLevel.length ; i++)
     {
-
         for(let j = 0 ; j < containerDivRowLevel[i].childElementCount; j++)
         {
-
             if (containerDivRowLevel[i].children[j].hasChildNodes())
             {
                 containerDivRowLevel[i].children[j].children[0].setAttribute("class",boardArrVal[i][j])
-            }
-            
+                // numOfCheckers[boardArrVal[i][j]] += 1;
+            }          
         }
     }
-
 }
 
 
@@ -230,7 +234,7 @@ function clearPossibleMove()
         }
         
     }
-    possibleMoveArr = [];
+    // possibleMoveArr = [];
 }
 
 function userMoves(event)
@@ -240,13 +244,8 @@ function userMoves(event)
     let chkrColClick = parseInt(event.target.getAttribute("col"))
     let kingMoves = 0;
 
-    if(boardArrVal[chkrRowClick][chkrColClick].includes("isKing"))
+    if(boardArrVal[chkrRowClick][chkrColClick] === checkersProperty[2] || boardArrVal[chkrRowClick][chkrColClick] === checkersProperty[-2])
     {
-        // let kingProperty = boardArrVal[chkrRowClick][chkrColClick].split(checkersProperty[turnVar])[1]
-        // let checkersPropertyLeft = boardArrVal[chkrRowClick][chkrColClick].split(checkersProperty[turnVar])[0]
-
-        // kingProperty === "isKing" ? kingMoves = 1 : kingMoves = 0;
-        console.log("clicked:",boardArrVal[chkrRowClick][chkrColClick])
         turnVar *= 2;
         if(turnVar > 2)
         {
@@ -256,32 +255,27 @@ function userMoves(event)
         {
             turnVar = -2;
         }
+        kingMoves = 1;
         
     }
-    else if (!boardArrVal[chkrRowClick][chkrColClick].includes("isKing"))
+
+    else if (boardArrVal[chkrRowClick][chkrColClick] !== checkersProperty[2] && boardArrVal[chkrRowClick][chkrColClick] !== checkersProperty[2])
     {
-        console.log("go in here?")
-        if (Math.abs(turnVar) === 2)
-        {
-            console.log("go in here? or here")
-            turnVar /=2;
-        }
-        
+        Math.abs(turnVar) === 2 ? (turnVar /= 2, kingMoves = 0) : turnVar;
     }
-    console.log("turnvar:",turnVar)
+
     if (chkrClsClick === "possibleMove")
     {
         removeBefore = 0;
         let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
         let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
-        console.log ("removed checker row col: ",removeCheckerRow,removeCheckerCol)
-        console.log("previous click: ",prevClickRow,prevClickCol)
-
+        let internalTurn = turnVar
+        Math.abs(internalTurn) === 2 ? internalTurn = internalTurn/2: internalTurn = internalTurn*2
        for(let i = 0; i < jumpedOver.length;i++)
        {
         if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
         {
-            if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1])
+            if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1] || boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[internalTurn * -1])
             {
                 boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
             } 
@@ -292,7 +286,6 @@ function userMoves(event)
        }
 
         boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
-
         boardArrVal[prevClickRow][prevClickCol] = "null"
         clearPossibleMove();
         jumpedOver = [];
@@ -302,106 +295,214 @@ function userMoves(event)
 
         if((chkrRowClick === boardRowLen - 1) && boardArrVal[chkrRowClick][chkrColClick] === "whiteChess")
         {
-            console.log(chkrRowClick,chkrColClick)
             boardArrVal[chkrRowClick][chkrColClick] += "isKing"
         }
         else if ((chkrRowClick === 0) && boardArrVal[chkrRowClick][chkrColClick] === "blackChess")
         {
-            console.log(chkrRowClick,chkrColClick)
             boardArrVal[chkrRowClick][chkrColClick] += "isKing"
         }
 
-        //compute possible move agn
         if (removeBefore)
         {
+            console.log("kings move is ?",kingMoves)
             computePosMoves(turnVar,chkrRowClick,chkrColClick,1) === 0 ? turnVar *= -1 : turnVar
-            console.log("here1")
             turnVar = turnVar;
         }
         else
         {
-            console.log("here2")
             turnVar *= -1;
         }
         
     }
         
-    // console.log("here",turnVar)
-    if(chkrClsClick === checkersProperty[turnVar])
+    if (chkrClsClick === checkersProperty[turnVar])
     {
         boardArrVal.forEach( x => x.includes("possibleMove") ? clearPossibleMove() : 0)
         prevClickRow = chkrRowClick;
         prevClickCol = chkrColClick;
         computePosMoves(turnVar,chkrRowClick,chkrColClick,0)
     }
-   
-    // console.log("rendered")
+    
     render()
+    winner = getWinner();
 }
 
 function computePosMoves (turns,row,col,kingsMove)
 {
     let rowForwardBackward;
     turns === 1 ? rowForwardBackward = -1 : rowForwardBackward = 1;
+
+    let length = 1;
+    let initial = -1;
     let possibleMove = 0;
-    for(let i = -1 ; i < 2 ; i++)
+
+    if (Math.abs(turns) === 2)
     {
-        let insidePreviousClickRol = row
-        let insidePreviousClickCol = col
+        length = 2;
+        initial = -1;
+        console.log("turns:",turns,initial,length)
 
-        let currentCol = col + i;
-        let currentRow = row + rowForwardBackward;
-        currentCol > (boardColLen - 1) ? currentCol = (boardColLen - 1): currentCol < 0 ? currentCol = 0 : currentCol
+    }
+    else if (turns === 1)
+    {
+        length = 0;
+        initial = -1;
+        console.log("turns:",turns,initial,length)
 
-
-        currentRow > (boardRowLen - 1) ? currentRow = (boardRowLen - 1): currentRow < 0 ? currentRow = 0 : currentRow
-        console.log("Current Col: ",currentRow,currentCol)
-
-        let directionPosMovesCol = currentCol - prevClickCol;
-        let directionPosMovesRow = currentRow - prevClickRow;
-
-        if (! gamePageDiv.children[currentRow].children[currentCol].className.includes("blackbckgrd"))
-        {
-            let checkerPosMove = (boardArrVal[currentRow][currentCol])
-            let currentVale = "" + checkersProperty[turnVar * -1];
-
-            if (checkerPosMove === "null" && kingsMove === 0)
-            {
-                boardArrVal[currentRow][currentCol] = "possibleMove" 
-                possibleMoveArr.push([currentRow,currentCol])
-            }
-
-            else if (checkerPosMove === currentVale)
-            {
-                
-                jumpedOver.push([currentRow,currentCol])
-                let computeFutureMovesRol = currentRow + (currentRow - insidePreviousClickRol);
-                let computeFutureMovesCol = currentCol + (currentCol - insidePreviousClickCol);
-
-            
-                if ((computeFutureMovesRol <= (boardRowLen - 1) && computeFutureMovesRol >= 0) && (computeFutureMovesCol <= (boardColLen - 1) && computeFutureMovesCol >= 0))
-                {
-                    computeDirection (computeFutureMovesRol,computeFutureMovesCol)
-                    possibleMove = 1;
-                }
-                
-            }   
-        }        
+    }
+    else if (turns === -1)
+    {
+        length = 2;
+        initial = 1;
+        console.log("turns:",turns,initial,length)
     }
 
+    for(let j = initial ; j < length ; j++)    
+    {
+        
+        for(let i = -1 ; i < 2 ; i++)
+        {
+            let intPreClickRol = row, intPreClickCol = col, curCol = col + i, curRow = row + j;
+            
+            // curCol > (boardColLen - 1) ? curCol = (boardColLen - 1): curCol < 0 ? curCol = 0 : curCol
+            // curRow > (boardRowLen - 1) ? curRow = (boardRowLen - 1): curRow < 0 ? curRow = 0 : curRow
+
+            curRow = checkMinMax(curRow,boardRowLen)
+            curCol = checkMinMax(curCol,boardColLen)
+
+            if (! gamePageDiv.children[curRow].children[curCol].className.includes("blackbckgrd"))
+            {
+                let checkerPosMove = (boardArrVal[curRow][curCol])
+                let internalTurn = turnVar
+
+                Math.abs(internalTurn) === 2 ? internalTurn = internalTurn/2: internalTurn = internalTurn*2
+                let normalCheckers = "" + checkersProperty[turnVar * -1];
+                let kingCheckers = "" + checkersProperty[internalTurn * -1];
+
+                if (checkerPosMove === "null" && kingsMove === 0)
+                {
+                    boardArrVal[curRow][curCol] = "possibleMove" 
+                    // possibleMoveArr.push([curRow,curCol])
+                    possibleMove = 1
+                }
+
+                else if (checkerPosMove === normalCheckers ||checkerPosMove === kingCheckers)
+                {
+                    jumpedOver.push([curRow,curCol])
+                    let findPosRol = curRow + (curRow - intPreClickRol);
+                    let findPosCol = curCol + (curCol - intPreClickCol);
+
+                    if ((findPosRol <= (boardRowLen - 1) && findPosRol >= 0) && (findPosCol <= (boardColLen - 1) && findPosCol >= 0))
+                    {
+                        computeDirection (findPosRol,findPosCol) === true ? possibleMove = 1 : possibleMove = 0;
+                        
+                    }
+                    
+                }   
+            }        
+        }
+}
     return possibleMove;
 
 }
 
 function computeDirection (rows,cols)
 {
-    console.log("compute Pos moves : ",rows,cols)
     if(boardArrVal[rows][cols] === "null")
     {
         boardArrVal[rows][cols] = "possibleMove"
-        possibleMoveArr.push([rows,cols])   
+        // possibleMoveArr.push([rows,cols])
+        return true;   
     }
+    
+    return false;
 }
+
+function checkMinMax (inputVal,len)
+{
+    inputVal > (len - 1) ? (inputVal = (len - 1)): inputVal < 0 ? inputVal = 0 : inputVal
+    return inputVal;
+}
+
+function renderPieces()
+{
+    for(let o in checkersProperty)
+{
+   console.log(checkersProperty[o])
+   numOfCheckers[checkersProperty[o]] = 0
+   for(let i = 0 ; i<boardArrVal.length;i++)
+   {
+    for(let j = 0 ; j < boardArrVal[i].length;j++)
+    {
+        if(boardArrVal[i][j] === checkersProperty[o])
+        {
+            numOfCheckers[checkersProperty[o]] += 1;
+        }
+    }
+   }
+}
+}
+
+function getWinner()
+{
+    let piecesLeft = {}
+    for(let o in checkersProperty)
+    {
+    
+        (Math.abs(o) === 2) ? idx = o/2 : idx = o 
+        // console.log(piecesLeft[idx])
+        if (piecesLeft[idx] === undefined)
+        {
+            piecesLeft[idx] = 0
+        }
+        piecesLeft[idx]  += numOfCheckers[checkersProperty[o]]
+        console.log(numOfCheckers[checkersProperty[o]])
+    
+    }
+        console.log(piecesLeft)
+        return "null"
+    }
+    
+   
+    // if (numOfCheckers[])
+
+
+//    if (chances !== 0 )
+//    {
+//     clearPossibleMove();
+    
+//    }
+//    else{
+//     clearPossibleMove();
+//     return (turnVar*-1)
+//    }
+
+   
+   
+    
+    // computePosMoves (turnVar,row,col,0)
+    // computePosMoves (turnVar,row,col,1)
+
+
+
+
+
+
+// for(let i = 0 ; i < boardArrVal.length; i ++)
+//    {
+//     for(let j = 0 ; j < boardArrVal[i].length ; j++)
+//     {
+//         if (boardArrVal[i][j] === checkersProperty[turnVar])
+//         {
+//             console.log("into here?")
+//             if (computePosMoves (turnVar,i,j,0) === 1)
+//                 {
+//                     chances ++;
+                    
+//                 }
+//         }
+//     }
+//    }
 
 
 
