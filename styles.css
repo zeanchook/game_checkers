@@ -121,7 +121,7 @@
     font-size: 20px;
     background-color: aquamarine;
     gap: 30px;
-    height: 100px;
+    height: 70px;
     width: 400px;
     border-radius: 10px;
 }
@@ -142,7 +142,16 @@ body
 {
     /* background-color: rgb(197, 180, 180); */
     background-image: url("https://i.redd.it/m23bwh4n0x151.png");
-    background-size: cover;
+    /* background-size: cover; */
+
+    /* https://stackoverflow.com/questions/19925075/fit-website-background-image-to-screen-size */
+    background-size: 100vw 100vh;
+    background-repeat: no-repeat;
+    /* background-repeat:no-repeat;
+    width: 100%;
+height: 100%;
+top: 0; */
+    /* background-size: contain; */
     font-family: "Reddit Mono", monospace;
     font-optical-sizing: auto;
 }
@@ -207,12 +216,13 @@ body
  {
     background-color: rgb(163, 207, 207);
     border-radius: 6px;
-    height: 100px;
+    height: 70px;
     width: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 20px;
+    
 }
 
 .gamepagePieces div
@@ -251,18 +261,62 @@ body
 
 .namepage
 {
-    width: 800px;
-    height: 500px;
+    width: 500px;
+    height: 400px;
     background-color: white;
     gap: 50px;
+    justify-content: center;
+    align-items:center;
 }
 
 .namepage-names{
     display: flex;
     flex: wrap;
     flex-direction: column;
-    gap:50px;
+    justify-content: center;
+    align-items:center;
+    /* font-size: px; */
+    gap:40px;
 }
+
+.namepage-namesVal
+{
+    display:flex;
+    gap:20px;
+}
+
+
+
+/* CSS */
+.namepageClearButton1,.namepageClearButton2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+  border-radius: 6px;
+  border: none;
+
+  background: #6E6D70;
+  box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12);
+  color: #DFDEDF;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.namepageClearButton1:focus,.namepageClearButton2:focus{
+  box-shadow: inset 0px 0.8px 0px -0.25px rgba(255, 255, 255, 0.2), 0px 0.5px 1px rgba(0, 0, 0, 0.1), 0px 0px 0px 3.5px rgba(58, 108, 217, 0.5);
+  outline: 0;
+}
+
+.namepage-label
+{
+    font-size: 12px;;
+}
+
+
+
 
 
 
@@ -319,8 +373,10 @@ body
   box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
 }
 
+
+
 /* CSS */
-.startpagebutton {
+.playbutton {
   background-color: #fbeee0;
   border: 2px solid #422800;
   border-radius: 30px;
@@ -339,20 +395,60 @@ body
   touch-action: manipulation;
 }
 
-.startpagebutton:hover {
+.playbutton:hover {
   background-color: #fff;
 }
 
-.startpagebutton:active {
+.playbutton:active {
   box-shadow: #422800 2px 2px 0 0;
   transform: translate(2px, 2px);
 }
 
 @media (min-width: 768px) {
-  .startpagebutton {
+  .playbutton {
     min-width: 120px;
     padding: 0 25px;
   }
+}
+
+
+/* <!-- HTML !-->
+<button class="button-89" role="button">Button 89</button> */
+
+/* CSS */
+.startpagebutton {
+  --b: 3px;   /* border thickness */
+  --s: .45em; /* size of the corner */
+  --color: #ffffff;
+  
+  padding: calc(.5em + var(--s)) calc(.9em + var(--s));
+  color: var(--color);
+  --_p: var(--s);
+  background:
+    conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0)
+    var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+  transition: .3s linear, color 0s, background-color 0s;
+  outline: var(--b) solid #0000;
+  outline-offset: .6em;
+  font-size: 16px;
+
+  border: 0;
+
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.startpagebutton:hover,
+.startpagebutton:focus-visible{
+  --_p: 0px;
+  outline-color: var(--color);
+  outline-offset: .05em;
+}
+
+.startpagebutton:active {
+  background: var(--color);
+  color: #fff;
 }
 
 

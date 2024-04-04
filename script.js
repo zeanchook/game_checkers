@@ -13,6 +13,11 @@
     "1": "Player 1",
     "-1": "Player 2"
   }
+  let playersName =
+  {
+    "1": "Player 1",
+    "-1": "Player 2"
+  }
    
   /*----- state variables -----*/
   let boardArrVal = [];
@@ -29,21 +34,37 @@
   let turnVar; 
 
   /*----- cached elements  -----*/
+  //   main body
   let bodyMain = document.querySelector("body")
 
+  //   Game page
   let gamePagePiecesDiv = document.querySelector(".gamepagePieces")
   let gamePageDiv = document.querySelector(".gamepage")
   let gamePageMsgDiv = document.querySelector(".gamepageMsg")
 
+  // startpage
   let startPageDiv = document.querySelector(".startpage")
   let resetButton = document.querySelector(".startover")
   let startButton = document.querySelector(".startpagebutton")
-  let namepageDiv = document.querySelector(".namepage")
   
+  // namepage
+  let namepageDiv = document.querySelector(".namepage")
+  let namePageInputBox1 = namepageDiv.children[0].children[0].children[0].children[0]
+  let namePageInputBox2 = namepageDiv.children[0].children[1].children[0].children[0]
+  let playButton = document.querySelector(".playbutton")
+  let clearButton1 = document.querySelector(".namepageClearButton1")
+  let clearButton2 = document.querySelector(".namepageClearButton2")
+
+  let modeSelection = document.querySelector(".namepage-label").children
+
+
   /*----- event listeners -----*/
   gamePageDiv.addEventListener("click",userMoves);
   resetButton.addEventListener("click",startPage);
-  startButton.addEventListener("click",startGame);
+  startButton.addEventListener("click",goNamePage);
+  playButton.addEventListener("click",startGame)
+  clearButton1.addEventListener("click",startGame)
+  clearButton2.addEventListener("click",startGame)
 
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
@@ -105,11 +126,11 @@ function renderMessage()
         Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
         gamePageMsgDiv.children[0].setAttribute("class",checkersProperty[turnIdx])
         console.log(gamePageMsgDiv.children[0])
-        gamePageMsgDiv.children[1].innerHTML =  playersTurn[turnIdx] + " turn! "
+        gamePageMsgDiv.children[1].innerHTML =  playersName[turnIdx] + " turn! "
     }
     else if (Math.abs(winner) === 1)
     {
-        gamePageMsgDiv.innerHTML = playersTurn[winner] + " Wins ! ";
+        gamePageMsgDiv.innerHTML = playersName[winner] + " Wins ! ";
     }
     else if (winner === "Tie ! ")
     {
@@ -502,12 +523,14 @@ function getWinner()
 }
 
 
-function startGame (event)
+function goNamePage (event)
   {
     gamePageDiv.style.display = "flex";
     gamePageMsgDiv.style.display = "flex";
     gamePagePiecesDiv.style.display = "flex";
     startPageDiv.style.display = "none";
+
+    
 
     // namepageDiv.style.display = "flex";
     // gamePageDiv.style.display = "none";
@@ -522,6 +545,52 @@ function startGame (event)
     startPageDiv.style.display = "flex";
   }
  
+  function startGame(event)
+  {
+    let inputBox1 = namePageInputBox1.value
+    let inputBox2 = namePageInputBox2.value
+
+    if (event.target.className === "playbutton")
+    {
+        if (inputBox1 === "" || inputBox2 === "")
+        {
+            namePageInputBox1.value = "Cannot be blank!"
+            namePageInputBox1.style.color = "red"
+            namePageInputBox2.value = "Cannot be blank!"
+            namePageInputBox2.style.color = "red"
+        }
+        else if (inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!")
+        {
+            playersName[1] = inputBox1
+            playersName[-1] = inputBox2
+            init();
+            gamePageDiv.style.display = "flex";
+            gamePageMsgDiv.style.display = "flex";
+            gamePagePiecesDiv.style.display = "flex";
+            startPageDiv.style.display = "none";
+            namepageDiv.style.display = "none";
+        }
+        // console.log(namePageInputBox1.append("test"),namePageInputBox2)
+    }
+
+    for(let i = 1 ; i <= 2; i++)
+    {
+        if (event.target.className === ("namepageClearButton" + i))
+        {
+            if ( i === 1)
+            {
+                namePageInputBox1.value = ""
+                namePageInputBox1.style.color = "black"
+            }
+            else
+            {
+                namePageInputBox2.value = ""
+                namePageInputBox2.style.color = "black"
+            }
+        }
+        
+    }
+  }
 
 
 

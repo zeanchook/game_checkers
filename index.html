@@ -19,8 +19,20 @@
     </div>
     <div class="namepage">
       <div class="namepage-names">Input your name
-        <div>Player 1<span><input></span></div>
-        <div>Player 2<span><input></span></div>
+        <div class="namepage-namesVal">Player 1<span><input></span><button class="namepageClearButton1">Clear</button></div>
+        <div class="namepage-namesVal">Player 2<span><input></span><button class="namepageClearButton2">Clear</button></div>
+        <div class="namepage-label">
+          <label  class="namepage-label" for="gamemode">Choose a mode:</label>
+          <select class="namepage-label" id="gamemode">
+            <option value="standard">Standard</option>
+            <option value="fastgame">Fast Game</option>
+            <option value="ultrafastgame">Ultra Fast Game</option>
+            <option value="slowgame">Slow Game</option>
+            <option value="ultraslowgame">Ultra Slow Game</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <button class="playbutton">Play</button>
       </div>
     </div>
 
