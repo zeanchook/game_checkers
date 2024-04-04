@@ -14,7 +14,7 @@
     <div class="mainContainer">
     <div class="startpage">
       <div class="titlestartpage"><h1>Expandable Checkers !</h1></div>
-      <div><img src="https://www.picgifs.com/graphics/c/checkers/graphics-checkers-915985.gif"/></div>
+      <div class="startPageImage"><img src="https://www.picgifs.com/graphics/c/checkers/graphics-checkers-915985.gif"/></div>
       <div><button class="startpagebutton">Start</button></div>
     </div>
     <div class="namepage">
@@ -31,7 +31,12 @@
             <option value="ultraslowgame">Ultra Slow Game</option>
             <option value="custom">Custom</option>
           </select>
+          <div class="namepageCustoms">Rows<input class="namepageCusRows">
+          Column<input class="namepageCusCols">
+          </div>
+          
         </div>
+        <div class="namepageMsg"></div>
         <button class="playbutton">Play</button>
       </div>
     </div>
@@ -44,7 +49,8 @@
     </div>
 
     <div class="gamepage"></div>
-    <div class="gamepageMsg"><div></div><span></span><button class="startover">Reset</button></div>
+    <div class="gamepageMsg"><div></div><span></span><span class="gamepagebutton"><button class="startover">Reset</button><button class="mainpage">Main Page</button></span></div>
+  
     <div class="endpage"></div>
     </div>
 	<script def src="script.js"></script>

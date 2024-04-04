@@ -1,6 +1,8 @@
   /*----- constants -----*/
-  const rowMAX = 10;
-  const colMAX = 10;
+  const rowMAX = 20;
+  const colMAX = 20;
+  const rowMIN = 4;
+  const colMIN = 2;
   let checkersProperty = 
   {
     "1": "blackChess",
@@ -21,8 +23,8 @@
    
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 10;
-  const boardColLen = 10;
+  let boardRowLen = 10;
+  let boardColLen = 10;
   let removeBefore = 0;
   let prevClickRow = 0 ;
   let prevClickCol = 0;
@@ -41,6 +43,7 @@
   let gamePagePiecesDiv = document.querySelector(".gamepagePieces")
   let gamePageDiv = document.querySelector(".gamepage")
   let gamePageMsgDiv = document.querySelector(".gamepageMsg")
+  let gamePageMainButton = document.querySelector(".mainpage")
 
   // startpage
   let startPageDiv = document.querySelector(".startpage")
@@ -56,23 +59,36 @@
   let clearButton2 = document.querySelector(".namepageClearButton2")
 
   let modeSelection = document.querySelector(".namepage-label").children
+  let namepageCustoms = document.querySelector(".namepageCustoms")
+  let namepageCusRows = document.querySelector(".namepageCusRows")
+  let namepageCusCols = document.querySelector(".namepageCusCols")
+  let namepageMsg = document.querySelector(".namepageMsg")
+  modeSelection[1].addEventListener("change",showHideCustom)
+
+  
+
+  
+  
 
 
   /*----- event listeners -----*/
   gamePageDiv.addEventListener("click",userMoves);
-  resetButton.addEventListener("click",startPage);
+  resetButton.addEventListener("click",init);
   startButton.addEventListener("click",goNamePage);
   playButton.addEventListener("click",startGame)
   clearButton1.addEventListener("click",startGame)
   clearButton2.addEventListener("click",startGame)
+  gamePageMainButton.addEventListener("click",startPage)
 
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
+
 //   namepageDiv.style.display = "flex";
 //   startPageDiv.style.display = "none";
   gamePageDiv.style.display = "none";
   gamePageMsgDiv.style.display = "none";
   gamePagePiecesDiv.style.display = "none";
+  namepageCustoms.style.display = "none"
 
   /*----- functions -----*/
   init()
@@ -525,17 +541,15 @@ function getWinner()
 
 function goNamePage (event)
   {
-    gamePageDiv.style.display = "flex";
-    gamePageMsgDiv.style.display = "flex";
-    gamePagePiecesDiv.style.display = "flex";
+    // gamePageDiv.style.display = "flex";
+    // gamePageMsgDiv.style.display = "flex";
+    // gamePagePiecesDiv.style.display = "flex";
+    // startPageDiv.style.display = "none";
     startPageDiv.style.display = "none";
-
-    
-
-    // namepageDiv.style.display = "flex";
-    // gamePageDiv.style.display = "none";
-    // gamePageMsgDiv.style.display = "none";
-    // gamePagePiecesDiv.style.display = "none";
+    namepageDiv.style.display = "flex";
+    gamePageDiv.style.display = "none";
+    gamePageMsgDiv.style.display = "none";
+    gamePagePiecesDiv.style.display = "none";
   }
   function startPage (event)
   {
@@ -549,15 +563,19 @@ function goNamePage (event)
   {
     let inputBox1 = namePageInputBox1.value
     let inputBox2 = namePageInputBox2.value
+    let gameMode = modeSelection[1].value
+    
+    
 
     if (event.target.className === "playbutton")
     {
-        if (inputBox1 === "" || inputBox2 === "")
+        if (inputBox1 === "" || inputBox2 === "" || getgameMode(gameMode) === false)
         {
             namePageInputBox1.value = "Cannot be blank!"
             namePageInputBox1.style.color = "red"
             namePageInputBox2.value = "Cannot be blank!"
             namePageInputBox2.style.color = "red"
+            
         }
         else if (inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!")
         {
@@ -571,6 +589,7 @@ function goNamePage (event)
             namepageDiv.style.display = "none";
         }
         // console.log(namePageInputBox1.append("test"),namePageInputBox2)
+    
     }
 
     for(let i = 1 ; i <= 2; i++)
@@ -590,7 +609,78 @@ function goNamePage (event)
         }
         
     }
+
+     
   }
+
+  const getgameMode = (inputGameMode) =>
+  {
+    let customRows = namepageCusRows.value
+    let customCols = namepageCusCols.value
+
+    let gameMode = {
+        "standard": { row: 8, col: 8 },
+        "fastgame": { row: 6, col: 6 },
+        "ultrafastgame": { row: 4, col: 4 },
+        "slowgame": { row: 10, col: 10 },
+        "ultraslowgame": { row: 20, col: 20 },
+    }
+    if (inputGameMode === "custom")
+    {
+        if (customRows === "" || customCols === "") 
+        {
+            namepageCusRows.style.borderColor = "red"
+            namepageCusCols.style.borderColor = "red"
+        }
+        else{
+            if (customRows < rowMIN)
+            {
+                namepageMsg.innerHTML = "The Minimum Rows Value is " + rowMIN;
+                return false;
+            }
+            else if(customCols < colMIN)
+            {
+                namepageMsg.innerHTML = "The Minimum Column Value is " + colMIN;
+                return false;
+            }
+            else if(customCols > colMAX)
+            {
+                namepageMsg.innerHTML = "The Maximum Column Value is " + colMAX;
+                return false;
+            }
+            else if(customCols > rowMAX)
+            {
+                namepageMsg.innerHTML = "The Maximum Rows Value is " + rowMAX;
+                return false;
+            }
+            else
+            {
+                boardRowLen = customRows
+                boardColLen = customCols
+                return true;
+            }
+            
+        }
+    }
+    else
+    {
+        boardRowLen = gameMode[inputGameMode].row
+        boardColLen = gameMode[inputGameMode].col
+        return true;
+    }   
+  }
+
+  function showHideCustom(event)
+  {
+    if (event.target.value === "custom")
+    {
+        namepageCustoms.style.display = "flex"
+    }
+    else{
+        namepageCustoms.style.display = "none"
+    }
+  }
+  
 
 
 
