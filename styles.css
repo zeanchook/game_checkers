@@ -57,7 +57,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 30px;
+    gap: 60px;
 }
 
 .blackChess
@@ -116,27 +116,252 @@
 .gamepageMsg
 {
     display: flex;
-    align-items: end;
-    font-size: 30px;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    background-color: aquamarine;
+    gap: 30px;
+    height: 100px;
+    width: 400px;
+    border-radius: 10px;
 }
+
+.gamepageMsg div{
+    /* gap: 30px; */
+    height:30px;
+    width:30px;
+}
+
+/* .startover
+{
+    height:20px;
+    width: 50px;
+} */
 
 body
 {
-    background-color: rgb(223, 123, 123);
+    /* background-color: rgb(197, 180, 180); */
+    background-image: url("https://i.redd.it/m23bwh4n0x151.png");
+    background-size: cover;
+    font-family: "Reddit Mono", monospace;
+    font-optical-sizing: auto;
 }
-
-.startpage
-{ 
-    /* background-size: auto;
-    height: 500px;
-    width: 500px;
-    align-items: center; 
-    background-position: center; */
- }
 
  .space
  {
     margin: 100px;
  }
+
+ .startpage
+ {
+    /* backface-visibility: 10%; */
+    /* height: 300px;
+    width: 300px; */
+    position: relative;
+    display: flex;
+    flex: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+ }
+
+ /* .titlestartpage
+ {
+    color: white;
+ } */
+
+ .titlestartpage
+ {
+    background-color: rgb(253, 253, 202);
+    height: 45px;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    border-radius: 6px;
+    opacity: 80%;
+ }
+
+
+ /* .startpage1
+ {
+    display:flex;   
+    align-items: center;
+    justify-content: center;
+ } */
+ 
+
+ .iconwhiteChesss
+ {
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    background-color: rgb(255, 255, 255);
+    /* flex: wrap; */
+    /* display: flex; */
+ }
+
+ .gamepagePieces
+ {
+    background-color: rgb(163, 207, 207);
+    border-radius: 6px;
+    height: 100px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.gamepagePieces div
+{
+    display: flex;
+    flex: wrap;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+    font-weight: bold;
+}
+
+.gamepagePieces div.whiteChess
+{
+    height: 30px;
+    width: 30px;
+}
+
+.gamepagePieces div.blackChess
+{
+    height: 30px;
+    width: 30px;
+}
+
+.gamepagePieces div.whiteChessisKing
+{
+    height: 30px;
+    width: 30px;
+}
+
+.gamepagePieces div.blackChessisKing
+{
+    height: 30px;
+    width: 30px;
+}
+
+.namepage
+{
+    width: 800px;
+    height: 500px;
+    background-color: white;
+    gap: 50px;
+}
+
+.namepage-names{
+    display: flex;
+    flex: wrap;
+    flex-direction: column;
+    gap:50px;
+}
+
+
+
+
+/* CSS */
+.startover {
+  appearance: none;
+  background-color: #2ea44f;
+  border: 1px solid rgba(27, 31, 35, .15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.startover:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.startover:hover {
+  background-color: #2c974b;
+}
+
+.startover:focus {
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+  outline: none;
+}
+
+.startover:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+  cursor: default;
+}
+
+.startover:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+
+/* CSS */
+.startpagebutton {
+  background-color: #fbeee0;
+  border: 2px solid #422800;
+  border-radius: 30px;
+  box-shadow: #422800 4px 4px 0 0;
+  color: #422800;
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 0 18px;
+  line-height: 35px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.startpagebutton:hover {
+  background-color: #fff;
+}
+
+.startpagebutton:active {
+  box-shadow: #422800 2px 2px 0 0;
+  transform: translate(2px, 2px);
+}
+
+@media (min-width: 768px) {
+  .startpagebutton {
+    min-width: 120px;
+    padding: 0 25px;
+  }
+}
+
+
+
+
+
+
+
+
+
 
  

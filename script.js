@@ -16,8 +16,8 @@
    
   /*----- state variables -----*/
   let boardArrVal = [];
-  const boardRowLen = 4;
-  const boardColLen = 4;
+  const boardRowLen = 10;
+  const boardColLen = 10;
   let removeBefore = 0;
   let prevClickRow = 0 ;
   let prevClickCol = 0;
@@ -26,20 +26,32 @@
   let winner;
   let jumpedOver = [];
   let currentPlayerMoves = 0;
-
   let turnVar; 
 
   /*----- cached elements  -----*/
   let bodyMain = document.querySelector("body")
+
+  let gamePagePiecesDiv = document.querySelector(".gamepagePieces")
   let gamePageDiv = document.querySelector(".gamepage")
   let gamePageMsgDiv = document.querySelector(".gamepageMsg")
-  let startPageDiv = document.querySelector(".startpage")
 
+  let startPageDiv = document.querySelector(".startpage")
+  let resetButton = document.querySelector(".startover")
+  let startButton = document.querySelector(".startpagebutton")
+  let namepageDiv = document.querySelector(".namepage")
   
   /*----- event listeners -----*/
-  gamePageDiv.addEventListener( ("click"),userMoves)
+  gamePageDiv.addEventListener("click",userMoves);
+  resetButton.addEventListener("click",startPage);
+  startButton.addEventListener("click",startGame);
 
-
+  namepageDiv.style.display = "none";
+  startPageDiv.style.display = "flex";
+//   namepageDiv.style.display = "flex";
+//   startPageDiv.style.display = "none";
+  gamePageDiv.style.display = "none";
+  gamePageMsgDiv.style.display = "none";
+  gamePagePiecesDiv.style.display = "none";
 
   /*----- functions -----*/
   init()
@@ -91,20 +103,42 @@ function renderMessage()
     {
         turnIdx = turnVar;
         Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
-        gamePageMsgDiv.innerHTML = "It is " + playersTurn[turnIdx] + " turn! ";
+        gamePageMsgDiv.children[0].setAttribute("class",checkersProperty[turnIdx])
+        console.log(gamePageMsgDiv.children[0])
+        gamePageMsgDiv.children[1].innerHTML =  playersTurn[turnIdx] + " turn! "
     }
     else if (Math.abs(winner) === 1)
     {
-        console.log("did it go here?")
-        // turnIdx = winner;
-        // Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
-        gamePageMsgDiv.innerHTML = "Winner is " + playersTurn[winner] + " !";
+        gamePageMsgDiv.innerHTML = playersTurn[winner] + " Wins ! ";
     }
     else if (winner === "Tie ! ")
     {
         gamePageMsgDiv.innerHTML = "Its a Tie !";
-    }   
-
+    }
+    
+    let piecesUpdate = gamePagePiecesDiv.children;
+    for(let i = 0 ; i< piecesUpdate.length;i++)
+    {
+        console.log(piecesUpdate[i].children[0].className)
+        for(let items in checkersProperty)
+        {
+            if(piecesUpdate[i].children[0].className === checkersProperty[items])
+            {
+                if (numOfCheckers[checkersProperty[items]] !== 0)
+                {
+                    piecesUpdate[i].children[0].style.display = "flex"
+                    piecesUpdate[i].children[1].style.display = "flex"
+                    piecesUpdate[i].children[1].innerHTML = numOfCheckers[checkersProperty[items]]
+                }
+                else
+                {
+                    piecesUpdate[i].children[0].style.display = "none"
+                    piecesUpdate[i].children[1].style.display = "none"
+                }
+                
+            }
+        }
+    }
 }
 
 function render()
@@ -162,7 +196,6 @@ function createCheckers (currentRowVal,col,parentDiv)
     }
 }
 
-// console.log(boardArrVal[0].length)
 
 function initBoard()
 {
@@ -176,8 +209,7 @@ function initBoard()
 
 function initBoard2()
 {
-boardArrVal.forEach(row => {row.forEach((cell, index, arr) => 
-{if (cell === undefined) {arr[index] = "null";}});});
+boardArrVal.forEach(row => {row.forEach((cell, index, arr) => {if (cell === undefined) {arr[index] = "null";}});});
 }
 
 function renderBoard()
@@ -203,9 +235,9 @@ function clearPossibleMove()
         for(let j = 0 ; j < boardArrVal[i].length ; j++)
         {
             if(boardArrVal[i][j] === "possibleMove")
-        {
-            boardArrVal[i][j] = "null";
-        }
+            {
+                boardArrVal[i][j] = "null";
+            }
         }
         
     }
@@ -239,27 +271,26 @@ function userMoves(event)
         removeBefore = 0;
         let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
         let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
-        // console.log("removal :",removeCheckerRow,removeCheckerCol)
         let internalTurn = turnVar
         Math.abs(internalTurn) === 2 ? internalTurn = internalTurn/2: internalTurn = internalTurn*2
-       for(let i = 0; i < jumpedOver.length;i++)
-       {
-        if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
+        for(let i = 0; i < jumpedOver.length;i++)
         {
-            console.log("###",jumpedOver[i][0],jumpedOver[i][1],checkersProperty[turnVar * -1],turnVar)
-            if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1] || boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[internalTurn * -1])
+            if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
             {
-                boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
-                console.log("jumped over ################## indeeeed remove")
-            } 
-            delete jumpedOver[i];
-            jumpedOver.pop()
-            removeBefore = 1;
+                console.log("###",jumpedOver[i][0],jumpedOver[i][1],checkersProperty[turnVar * -1],turnVar)
+                if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1] || boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[internalTurn * -1])
+                {
+                    boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
+                    console.log("jumped over ################## indeeeed remove")
+                } 
+                delete jumpedOver[i];
+                jumpedOver.pop()
+                removeBefore = 1;
+            }
         }
-       }
 
-        boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol]
-        boardArrVal[prevClickRow][prevClickCol] = "null"
+        boardArrVal[chkrRowClick][chkrColClick] = boardArrVal[prevClickRow][prevClickCol];
+        boardArrVal[prevClickRow][prevClickCol] = "null";
         clearPossibleMove();
         jumpedOver = [];
         prevClickRow = chkrRowClick;
@@ -278,9 +309,7 @@ function userMoves(event)
         if (removeBefore)
         {
             console.log("kings move is ?",kingMoves)
-            console.log("turnvar?>:",turnVar)
-            // computePosMoves(turnVar,chkrRowClick,chkrColClick,1) !== 0 ?  turnVar : turnVar *= -1
-            
+            console.log("turnvar?>:",turnVar)            
             let test = computePosMoves(turnVar,chkrRowClick,chkrColClick,1)
 
             console.log("test",test)
@@ -291,28 +320,13 @@ function userMoves(event)
             }
             else{
                 turnVar *= -1;
-            }
-            // if (computePosMoves(turnVar,chkrRowClick,chkrColClick,1))
-            // {
-            //     console.log("it is 1")
-            //     turnVar *= -1
-            // }
-            // else
-            // {
-            //     console.log("it is not 1")
-            //     turnVar = turnVar;
-            // }
-
-            console.log("turnvar?:",turnVar)
-            // turnVar = turnVar;
+            }         
         }
         else if(removeBefore === 0)
         {
             turnVar *= -1;
         }
-        currentPlayerMoves = 1;
-
-        
+        currentPlayerMoves = 1;       
     }
         
     if (chkrClsClick === checkersProperty[turnVar])
@@ -322,15 +336,11 @@ function userMoves(event)
         prevClickCol = chkrColClick;
         computePosMoves(turnVar,chkrRowClick,chkrColClick,0)
     }
-    
     render();
 }
 
 function computePosMoves (turns,row,col,kingsMove)
 {
-    // let rowForwardBackward;
-    // turns === 1 ? rowForwardBackward = -1 : rowForwardBackward = 1;
-
     let length = 1;
     let initial = -1;
     let possibleMove = 0;
@@ -339,21 +349,21 @@ function computePosMoves (turns,row,col,kingsMove)
     {
         length = 2;
         initial = -1;
-        console.log("turns:",turns,initial,length)
+        // console.log("turns:",turns,initial,length)
 
     }
     else if (turns === 1)
     {
         length = 0;
         initial = -1;
-        console.log("turns:",turns,initial,length)
+        // console.log("turns:",turns,initial,length)
 
     }
     else if (turns === -1)
     {
         length = 2;
         initial = 1;
-        console.log("turns:",turns,initial,length)
+        // console.log("turns:",turns,initial,length)
     }
 
     for(let j = initial ; j < length ; j++)    
@@ -372,10 +382,10 @@ function computePosMoves (turns,row,col,kingsMove)
                 let checkerPosMove = (boardArrVal[curRow][curCol])
                 let internalTurn = turns
 
-                Math.abs(internalTurn) === 1 ? internalTurn *= 2: internalTurn
-                // internalTurn = internalTurn * 2
+                Math.abs(internalTurn) === 1 ? internalTurn *= 2: internalTurn /= 2;
                 let normalCheckers = "" + checkersProperty[turns * -1];
                 let kingCheckers = "" + checkersProperty[internalTurn * -1];
+                console.log("vs",checkerPosMove,normalCheckers,kingCheckers)
 
                 if (checkerPosMove === "null" && kingsMove === 0)
                 {
@@ -385,6 +395,7 @@ function computePosMoves (turns,row,col,kingsMove)
 
                 else if (checkerPosMove === normalCheckers ||checkerPosMove === kingCheckers)
                 {
+                    console.log("cant find?")
                     jumpedOver.push([curRow,curCol])
                     let findPosRol = curRow + (curRow - intPreClickRol);
                     let findPosCol = curCol + (curCol - intPreClickCol);
@@ -398,7 +409,6 @@ function computePosMoves (turns,row,col,kingsMove)
         }
 }
     return possibleMove;
-
 }
 
 function computeDirection (rows,cols)
@@ -421,17 +431,17 @@ function renderPieces()
 {
     for(let o in checkersProperty)
     {
-    numOfCheckers[checkersProperty[o]] = 0
-    for(let i = 0 ; i<boardArrVal.length;i++)
-    {
-        for(let j = 0 ; j < boardArrVal[i].length;j++)
+        numOfCheckers[checkersProperty[o]] = 0
+        for(let i = 0 ; i<boardArrVal.length;i++)
         {
-            if(boardArrVal[i][j] === checkersProperty[o])
+            for(let j = 0 ; j < boardArrVal[i].length;j++)
             {
-                numOfCheckers[checkersProperty[o]] += 1;
+                if(boardArrVal[i][j] === checkersProperty[o])
+                {
+                    numOfCheckers[checkersProperty[o]] += 1;
+                }
             }
         }
-   }
     }
 }
 
@@ -478,7 +488,6 @@ function getWinner()
     }
 
     currentPlayerMoves = 0;
-    console.log("players move: ",playersMove,internalTurnVar)
     
     if (playersMove[internalTurnVar] == 0)
     {
@@ -491,6 +500,27 @@ function getWinner()
     
     return "null"
 }
+
+
+function startGame (event)
+  {
+    gamePageDiv.style.display = "flex";
+    gamePageMsgDiv.style.display = "flex";
+    gamePagePiecesDiv.style.display = "flex";
+    startPageDiv.style.display = "none";
+
+    // namepageDiv.style.display = "flex";
+    // gamePageDiv.style.display = "none";
+    // gamePageMsgDiv.style.display = "none";
+    // gamePagePiecesDiv.style.display = "none";
+  }
+  function startPage (event)
+  {
+    gamePageDiv.style.display = "none";
+    gamePageMsgDiv.style.display = "none";
+    gamePagePiecesDiv.style.display = "none";
+    startPageDiv.style.display = "flex";
+  }
  
 
 
