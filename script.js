@@ -48,8 +48,9 @@
   let zoomoutButton = document.querySelector(".zoomout")
   let settings = document.querySelector(".settings")
   let boardColor = document.querySelector(".colorpicker")
-    let boardColor1 = document.querySelector("#colorpicker1")
-    let boardColor2 = document.querySelector("#colorpicker2")
+let boardColor1 = document.querySelector("#colorpicker1")
+let boardColor2 = document.querySelector("#colorpicker2")
+  
     
   
 
@@ -85,6 +86,7 @@
   boardColor.addEventListener("click",hideShowBoardColor)
 boardColor1.addEventListener("change",colorizeBackground)
 boardColor2.addEventListener("change",colorizeBackground)
+  
 
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
@@ -97,9 +99,11 @@ boardColor2.addEventListener("change",colorizeBackground)
   zoominButton.style.display = "none"
   zoomoutButton.style.display = "none"
   resetButton.style.display = "none"
-  boardColor.style.display = "none";
+
+    boardColor.style.display = "none";
     boardColor1.style.display = "none";
     boardColor2.style.display = "none";
+  
     
   
   
@@ -777,15 +781,21 @@ function showHideCustom(event)
 }
 
 
-let blackBoard = document.querySelectorAll(".blackbckgrd")
-let whiteBoard = document.querySelectorAll(".whitebckgrd")
+
+
+
 
 
 
 function colorizeBackground()
 {
+    let blackBoard = document.querySelectorAll(".blackbckgrd")
+let whiteBoard = document.querySelectorAll(".whitebckgrd")
+    console.log("test")
     for(let i = 0 ; i < blackBoard.length ; i++)
     {
+        console.log(boardColor1.value)
+        console.log(blackBoard[i])
         blackBoard[i].style.backgroundColor =  boardColor1.value;
     }
     for(let i = 0 ; i < whiteBoard.length ; i++)
