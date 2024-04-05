@@ -97,20 +97,23 @@ boardColor2.addEventListener("change",colorizeBackground)
   zoominButton.style.display = "none"
   zoomoutButton.style.display = "none"
   resetButton.style.display = "none"
-
-  
-  
-  namepageDiv.style.display = "none";
-  startPageDiv.style.display = "none";
-  gamePageDiv.style.display = "flex";
-  gamePageMsgDiv.style.display = "flex";
-  gamePagePiecesDiv.style.display = "flex";
-  namepageCustoms.style.display = "none"
-  settings.style.display = "flex";
-  gamePageMainButton.style.display = "flex";
   boardColor.style.display = "none";
-  boardColor1.style.display = "none";
-  boardColor2.style.display = "none";
+    boardColor1.style.display = "none";
+    boardColor2.style.display = "none";
+    
+  
+  
+//   namepageDiv.style.display = "none";
+//   startPageDiv.style.display = "none";
+//   gamePageDiv.style.display = "flex";
+//   gamePageMsgDiv.style.display = "flex";
+//   gamePagePiecesDiv.style.display = "flex";
+//   namepageCustoms.style.display = "none"
+//   settings.style.display = "flex";
+//   gamePageMainButton.style.display = "flex";
+//   boardColor.style.display = "none";
+//   boardColor1.style.display = "none";
+//   boardColor2.style.display = "none";
   
 
   
