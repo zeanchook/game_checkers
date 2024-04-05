@@ -84,9 +84,10 @@ let boardColor2 = document.querySelector("#colorpicker2")
   gamePageMainButton.addEventListener("click",startPage)
   settings.addEventListener("click",gamesettings)
   boardColor.addEventListener("click",hideShowBoardColor)
-boardColor1.addEventListener("change",colorizeBackground)
-boardColor2.addEventListener("change",colorizeBackground)
+  boardColor1.addEventListener("change",colorizeBackground)
+  boardColor2.addEventListener("change",colorizeBackground)
   
+
 
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
@@ -103,9 +104,6 @@ boardColor2.addEventListener("change",colorizeBackground)
     boardColor.style.display = "none";
     boardColor1.style.display = "none";
     boardColor2.style.display = "none";
-  
-    
-  
   
 //   namepageDiv.style.display = "none";
 //   startPageDiv.style.display = "none";
@@ -168,6 +166,10 @@ function gamesettings(event)
         zoominButton.style.display = "none"
         zoomoutButton.style.display = "none"
         boardColor.style.display = "none"
+        
+        boardColor.style.display = "none"
+        boardColor1.style.display = "none"
+        boardColor2.style.display = "none"
     }
     else{
         zoominButton.style.display = ""
@@ -640,6 +642,7 @@ function goNamePage (event)
     gamePageDiv.style.display = "none";
     gamePageMsgDiv.style.display = "none";
     gamePagePiecesDiv.style.display = "none";
+    namepageMsg.innerHTML = ""
 }
 function startPage (event)
 {
