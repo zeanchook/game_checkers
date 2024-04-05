@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <video id="background-video" autoplay loop muted>
+      <source src="deepspace.mp4" type="video/mp4">
+    </video>
     <div class="mainContainer">
     <div class="startpage">
       <div class="titlestartpage"><h1>Expandable Checkers !</h1></div>
@@ -49,8 +52,19 @@
     </div>
 
     <div class="gamepage"></div>
-    <div class="gamepageMsg"><div></div><span></span><span class="gamepagebutton"><button class="startover">Reset</button><button class="mainpage">Main Page</button></span></div>
-  
+    <div class="gamepageMsg"><div></div><span></span></div>
+    <div>
+      <span class="gamepagebutton">
+        <button class="startover">Reset</button>
+        <button class="mainpage">Main Page</button>
+        <button class="settings">Settings</button>
+        <button class="zoomin">+</button>
+        <button class="zoomout">-</button>
+        <button class = "colorpicker" for="colorpicker">Board Color</button>
+        <input type="color" id="colorpicker1" value="#ffffff">
+        <input type="color" id="colorpicker2" value="#f78800">
+     </span>
+    </div>
     <div class="endpage"></div>
     </div>
 	<script def src="script.js"></script>

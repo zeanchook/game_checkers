@@ -17,7 +17,6 @@
     /* display: flex; */
     align-content: center;
     justify-content: center;
-
 }
 
 .gamepage .row .col
@@ -27,6 +26,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 2px;
 }
 
 .row
@@ -37,12 +37,12 @@
 
 .blackbckgrd
 {
-    background-color: rgb(48, 54, 54);
+    background-color: rgb(221, 214, 214);
 }
 
 .whitebckgrd
 {
-    background-color: rgb(235, 142, 28);
+    background-color: #dc8d2d;
 }
 
 
@@ -57,7 +57,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    gap: 60px;
+    gap: 10px;
 }
 
 .blackChess
@@ -102,7 +102,6 @@
     background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7aeBA7vzQPO6bMnXek4UyU4cxI0sB8S0Hvw&s");
     background-position: center;
     background-size: 35px;
-   
 }
 
 .possibleMove
@@ -111,7 +110,18 @@
     height: 80%;
     width: 80%;
     background-color: rgb(149, 240, 149);
+    animation: glow .5s infinite alternate;
 }
+
+/* https://stackoverflow.com/questions/34821217/easily-create-an-animated-glow */
+@keyframes glow {
+    from {
+      box-shadow: 0 0 2px -2px #aef4af;
+    }
+    to {
+      box-shadow: 0 0 2px 2px #aef4af;
+    }
+  }
 
 .gamepageMsg
 {
@@ -119,10 +129,10 @@
     align-items: center;
     justify-content: space-evenly;
     font-size: 20px;
-    background-color: aquamarine;
+    background-color: rgb(247, 201, 161);
     gap: 30px;
     height: 70px;
-    width: 600px;
+    width: 300px;
     border-radius: 10px;
 }
 
@@ -136,6 +146,7 @@
 {
     display: flex;
     gap: 10px;
+    align-items: center;
     /* flex: end; */
 }
 
@@ -148,7 +159,10 @@
 body
 {
     /* background-color: rgb(197, 180, 180); */
-    background-image: url("https://i.redd.it/m23bwh4n0x151.png");
+    /* background-image: url("https://i.redd.it/m23bwh4n0x151.png"); */
+    /* background-image: url("https://motionbgs.com/media/4646/spider-man-2.960x540.mp4"); */
+    background-clip: "d.mp4";
+    
     /* background-size: cover; */
 
     /* https://stackoverflow.com/questions/19925075/fit-website-background-image-to-screen-size */
@@ -555,16 +569,146 @@ top: 0; */
 }
 
 
+/* CSS */
+
+
+/* CSS */
+
+
+/* CSS */
+.zoomin,.zoomout,.colorpicker,.colorpicker1,.colorpicker2{
+  appearance: none;
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292E;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 10px;
+  list-style: none;
+  padding: 6px 15px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+
+.zoomin:hover,.zoomout:hover,.colorpicker:hover{
+  background-color: #F3F4F6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.zoomin:disabled,.zoomout:disabled,.colorpicker:disabled{
+  background-color: #FAFBFC;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959DA5;
+  cursor: default;
+}
+
+.zoomin:active,.zoomout:active,.colorpicker:active{
+  background-color: #EDEFF2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.zoomin:focus,.zoomout:focus,.colorpicker:focus {
+  outline: 1px transparent;
+}
+
+.zoomin:before,.zoomout:before,.colorpicker:before{
+  display: none;
+}
+
+.zoomin:-webkit-details-marker,.zoomout:-webkit-details-marker,.colorpicker:-webkit-details-marker  {
+  display: none;
+}
+
+#background-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+  }
 
 
 
 
 
-
-
-
-
-
-
+  
+  /* CSS */
+  .settings {
+    appearance: none;
+    background-color: #FFFFFF;
+    border-width: 0;
+    box-sizing: border-box;
+    color: #000000;
+    cursor: pointer;
+    display: inline-block;
+    font-family: Clarkson,Helvetica,sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1em;
+    margin: 0;
+    opacity: 1;
+    outline: 0;
+    padding: 1.5em 2.2em;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    text-rendering: geometricprecision;
+    text-transform: uppercase;
+    transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: baseline;
+    white-space: nowrap;
+  }
+  
+  .settings:before {
+    animation: opacityFallbackOut .5s step-end forwards;
+    backface-visibility: hidden;
+    background-color: #EBEBEB;
+    clip-path: polygon(-1% 0, 0 0, -25% 100%, -1% 100%);
+    content: "click?";
+    align-content: center;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transform: translateZ(0);
+    transition: clip-path .5s cubic-bezier(.165, 0.84, 0.44, 1), -webkit-clip-path .5s cubic-bezier(.165, 0.84, 0.44, 1);
+    width: 100%;
+  }
+  
+  .settings:hover:before {
+    animation: opacityFallbackIn 0s step-start forwards;
+    clip-path: polygon(0 0, 101% 0, 101% 101%, 0 101%);
+  }
+  
+  .settings:after {
+    background-color: #FFFFFF;
+  }
+  
+  .settings span {
+    z-index: 1;
+    position: relative;
+  }
 
  

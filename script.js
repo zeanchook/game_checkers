@@ -44,6 +44,14 @@
   let gamePageDiv = document.querySelector(".gamepage")
   let gamePageMsgDiv = document.querySelector(".gamepageMsg")
   let gamePageMainButton = document.querySelector(".mainpage")
+  let zoominButton = document.querySelector(".zoomin")
+  let zoomoutButton = document.querySelector(".zoomout")
+  let settings = document.querySelector(".settings")
+  let boardColor = document.querySelector(".colorpicker")
+    let boardColor1 = document.querySelector("#colorpicker1")
+    let boardColor2 = document.querySelector("#colorpicker2")
+    
+  
 
   // startpage
   let startPageDiv = document.querySelector(".startpage")
@@ -65,12 +73,6 @@
   let namepageMsg = document.querySelector(".namepageMsg")
   modeSelection[1].addEventListener("change",showHideCustom)
 
-  
-
-  
-  
-
-
   /*----- event listeners -----*/
   gamePageDiv.addEventListener("click",userMoves);
   resetButton.addEventListener("click",init);
@@ -79,16 +81,99 @@
   clearButton1.addEventListener("click",startGame)
   clearButton2.addEventListener("click",startGame)
   gamePageMainButton.addEventListener("click",startPage)
+  settings.addEventListener("click",gamesettings)
+  boardColor.addEventListener("click",hideShowBoardColor)
+boardColor1.addEventListener("change",colorizeBackground)
+boardColor2.addEventListener("change",colorizeBackground)
 
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
-
-//   namepageDiv.style.display = "flex";
-//   startPageDiv.style.display = "none";
   gamePageDiv.style.display = "none";
   gamePageMsgDiv.style.display = "none";
   gamePagePiecesDiv.style.display = "none";
   namepageCustoms.style.display = "none"
+  settings.style.display = "none"
+  gamePageMainButton.style.display = "none"
+  zoominButton.style.display = "none"
+  zoomoutButton.style.display = "none"
+  resetButton.style.display = "none"
+
+  
+  
+  namepageDiv.style.display = "none";
+  startPageDiv.style.display = "none";
+  gamePageDiv.style.display = "flex";
+  gamePageMsgDiv.style.display = "flex";
+  gamePagePiecesDiv.style.display = "flex";
+  namepageCustoms.style.display = "none"
+  settings.style.display = "flex";
+  gamePageMainButton.style.display = "flex";
+  boardColor.style.display = "none";
+  boardColor1.style.display = "none";
+  boardColor2.style.display = "none";
+  
+
+  
+
+//   ##### width ######
+//   gamePageDiv.style.width = "400px";
+//   gamePageDiv.style.height = "400px";
+//   console.log("here:",gamePageDiv.getBoundingClientRect().width)
+
+const zoomin = (e) =>
+{
+    let gamewidth = gamePageDiv.getBoundingClientRect().width
+    if(e.target.className)
+    {
+        console.log("here:",gamePageDiv.getBoundingClientRect().width)
+        gamePageDiv.getBoundingClientRect().width
+        if(gamewidth < 600)
+        {
+            gamewidth += 100;
+            gamewidth = gamewidth + "px"
+            gamePageDiv.style.width = gamewidth;
+            gamePageDiv.style.height = gamewidth;
+        }
+        //   console.log("here:",gamePageDiv.getBoundingClientRect().width)
+    };
+}
+
+const zoomout = (e) =>
+{
+    let gamewidth = gamePageDiv.getBoundingClientRect().width
+    if(e.target.className)
+    {
+        if(gamewidth > 100)
+        console.log("here:",gamePageDiv.getBoundingClientRect().width)
+        gamePageDiv.getBoundingClientRect().width
+        gamewidth -= 100;
+        gamewidth = gamewidth + "px"
+          gamePageDiv.style.width = gamewidth;
+          gamePageDiv.style.height = gamewidth;
+        //   console.log("here:",gamePageDiv.getBoundingClientRect().width)
+    };
+}
+
+function gamesettings(event)
+{
+    if((zoominButton.style.display === "" || zoomoutButton.style.display === ""))
+    {
+        zoominButton.style.display = "none"
+        zoomoutButton.style.display = "none"
+        boardColor.style.display = "none"
+    }
+    else{
+        zoominButton.style.display = ""
+        zoomoutButton.style.display = ""
+        boardColor.style.display = ""
+    }
+     
+}
+
+
+zoominButton.addEventListener("click",zoomin)
+zoomoutButton.addEventListener("click",zoomout)
+
 
   /*----- functions -----*/
   init()
@@ -96,7 +181,7 @@
   function init()
   {
     let checkersLength = gamePageDiv.children.length;
-    if (checkersLength !== 0 )
+    if (checkersLength !== 0)
     {for(let i = 0 ; i < checkersLength ; i++) {gamePageDiv.children[0].remove()}}
     initBoard();
 
@@ -105,7 +190,7 @@
         let createMainDivRow = document.createElement("div");
         let createMainDivRowClassName = "row";
         createMainDivRow.setAttribute("class",createMainDivRowClassName);   
-        gamePageDiv.append(createMainDivRow)   
+        gamePageDiv.append(createMainDivRow);   
     }
 
     for(let row = 0 ; row < gamePageDiv.childNodes.length;row++)
@@ -127,7 +212,7 @@
             gamePageDiv.childNodes[row].append(createMainDivCol);   
         }  
     }
-    winner = "null"
+    winner = "null";
     turnVar = 1;
     initBoard2();
     render();
@@ -246,7 +331,7 @@ function initBoard()
 
 function initBoard2()
 {
-boardArrVal.forEach(row => {row.forEach((cell, index, arr) => {if (cell === undefined) {arr[index] = "null";}});});
+    boardArrVal.forEach(row => {row.forEach((cell, index, arr) => {if (cell === undefined) {arr[index] = "null";}});});
 }
 
 function renderBoard()
@@ -286,7 +371,6 @@ function userMoves(event)
     let chkrRowClick = parseInt(event.target.getAttribute("row"))
     let chkrColClick = parseInt(event.target.getAttribute("col"))
     let kingMoves = 0;
-
 
     for(let itemsInside in checkersProperty)
     {
@@ -534,63 +618,73 @@ function getWinner()
     {
         return "Tie ! "
     }
-    
     return "null"
 }
 
 
 function goNamePage (event)
-  {
-    // gamePageDiv.style.display = "flex";
-    // gamePageMsgDiv.style.display = "flex";
-    // gamePagePiecesDiv.style.display = "flex";
-    // startPageDiv.style.display = "none";
+{
+// gamePageDiv.style.display = "flex";
+// gamePageMsgDiv.style.display = "flex";
+// gamePagePiecesDiv.style.display = "flex";
+// startPageDiv.style.display = "none";
     startPageDiv.style.display = "none";
     namepageDiv.style.display = "flex";
     gamePageDiv.style.display = "none";
     gamePageMsgDiv.style.display = "none";
     gamePagePiecesDiv.style.display = "none";
-  }
-  function startPage (event)
-  {
+}
+function startPage (event)
+{
     gamePageDiv.style.display = "none";
     gamePageMsgDiv.style.display = "none";
     gamePagePiecesDiv.style.display = "none";
     startPageDiv.style.display = "flex";
-  }
- 
-  function startGame(event)
-  {
-    let inputBox1 = namePageInputBox1.value
-    let inputBox2 = namePageInputBox2.value
-    let gameMode = modeSelection[1].value
-    
-    
 
-    if (event.target.className === "playbutton")
-    {
-        if (inputBox1 === "" || inputBox2 === "" || getgameMode(gameMode) === false)
-        {
-            namePageInputBox1.value = "Cannot be blank!"
-            namePageInputBox1.style.color = "red"
-            namePageInputBox2.value = "Cannot be blank!"
-            namePageInputBox2.style.color = "red"
-            
-        }
-        else if (inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!")
-        {
-            playersName[1] = inputBox1
-            playersName[-1] = inputBox2
-            init();
-            gamePageDiv.style.display = "flex";
-            gamePageMsgDiv.style.display = "flex";
-            gamePagePiecesDiv.style.display = "flex";
-            startPageDiv.style.display = "none";
-            namepageDiv.style.display = "none";
-        }
-        // console.log(namePageInputBox1.append("test"),namePageInputBox2)
+    gamePageMainButton.style.display = "none";
+    resetButton.style.display = "none";
+    settings.style.display = "none";
+
+    boardColor.style.display = "none";
+    boardColor1.style.display = "none";
+    boardColor2.style.display = "none";
+    zoominButton.style.display = "none";
+    zoomoutButton.style.display = "none";
+}
+ 
+function startGame(event)
+{
     
+let inputBox1 = namePageInputBox1.value;
+let inputBox2 = namePageInputBox2.value;
+let gameMode = modeSelection[1].value;
+
+if (event.target.className === "playbutton")
+{
+    if (inputBox1 === "" || inputBox2 === "" || getgameMode(gameMode) === false)
+    {
+        namePageInputBox1.value = "Cannot be blank!"
+        namePageInputBox1.style.color = "red"
+        namePageInputBox2.value = "Cannot be blank!"
+        namePageInputBox2.style.color = "red"
+        
     }
+    else if (inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!")
+    {
+        playersName[1] = inputBox1
+        playersName[-1] = inputBox2
+        init();
+        gamePageDiv.style.display = "flex";
+        gamePageMsgDiv.style.display = "flex";
+        gamePagePiecesDiv.style.display = "flex";
+        startPageDiv.style.display = "none";
+        namepageDiv.style.display = "none";
+
+        gamePageMainButton.style.display = "flex";
+        resetButton.style.display = "flex";
+        settings.style.display = "";
+    }    
+}
 
     for(let i = 1 ; i <= 2; i++)
     {
@@ -606,12 +700,9 @@ function goNamePage (event)
                 namePageInputBox2.value = ""
                 namePageInputBox2.style.color = "black"
             }
-        }
-        
+        }   
     }
-
-     
-  }
+}
 
   const getgameMode = (inputGameMode) =>
   {
@@ -670,22 +761,53 @@ function goNamePage (event)
     }   
   }
 
-  function showHideCustom(event)
-  {
+function showHideCustom(event)
+{
     if (event.target.value === "custom")
     {
         namepageCustoms.style.display = "flex"
     }
-    else{
+    else
+    {
         namepageCustoms.style.display = "none"
     }
-  }
-  
+}
+
+
+let blackBoard = document.querySelectorAll(".blackbckgrd")
+let whiteBoard = document.querySelectorAll(".whitebckgrd")
+
+
+
+function colorizeBackground()
+{
+    for(let i = 0 ; i < blackBoard.length ; i++)
+    {
+        blackBoard[i].style.backgroundColor =  boardColor1.value;
+    }
+    for(let i = 0 ; i < whiteBoard.length ; i++)
+    {
+        whiteBoard[i].style.backgroundColor =  boardColor2.value;
+    }
+}
 
 
 
 
+function hideShowBoardColor()
+{
+    if(boardColor1.style.display === "none" || boardColor1.style.display === "none")
+    {
+        boardColor1.style.display = ""
+        boardColor2.style.display = ""
+    }
+    else
+    {
+        boardColor1.style.display = "none"
+        boardColor2.style.display = "none"
+    }
 
+}
     
    
    
