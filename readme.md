@@ -19,7 +19,7 @@ Here is the link to the game  ➡️  [Expandables Checkers](https://game-checke
 
 ## The Game
 
-![Game](game.png)
+![Game](files/game.png)
 
 ### Turns
 

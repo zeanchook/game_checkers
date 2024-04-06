@@ -39,7 +39,8 @@
   //   main body
   let bodyMain = document.querySelector("body")
   let clicksound = document.querySelector("#clicksound")
-
+  let chesssound = document.querySelector("#chesssound")
+  chesssound.playbackRate = 1.5;
 
   //   Game page
   let gamePagePiecesDiv = document.querySelector(".gamepagePieces")
@@ -54,9 +55,6 @@
   let boardColor2 = document.querySelector("#colorpicker2")
   let zoombutton = document.querySelector(".zoombutton")
   
-    
-  
-
   // startpage
   let startPageDiv = document.querySelector(".startpage")
   let resetButton = document.querySelector(".startover")
@@ -69,13 +67,14 @@
   let playButton = document.querySelector(".playbutton")
   let clearButton1 = document.querySelector(".namepageClearButton1")
   let clearButton2 = document.querySelector(".namepageClearButton2")
-
   let modeSelection = document.querySelector(".namepage-label").children
   let namepageCustoms = document.querySelector(".namepageCustoms")
   let namepageCusRows = document.querySelector(".namepageCusRows")
   let namepageCusCols = document.querySelector(".namepageCusCols")
   let namepageMsg = document.querySelector(".namepageMsg")
   modeSelection[1].addEventListener("change",showHideCustom)
+  zoominButton.addEventListener("click",zoomin)
+  zoomoutButton.addEventListener("click",zoomout)
   
 
   /*----- event listeners -----*/
@@ -94,15 +93,6 @@
   namePageInputBox1.addEventListener("click",clearField)
   namePageInputBox2.addEventListener("click",clearField)
 
-  function clearField (event)
-  {
-    event.target.style.color = "black"
-    event.target.value = ""
-  }
-  
-  
-
-
   namepageDiv.style.display = "none";
   startPageDiv.style.display = "flex";
   gamePageDiv.style.display = "none";
@@ -114,103 +104,11 @@
   zoominButton.style.display = "none"
   zoomoutButton.style.display = "none"
   resetButton.style.display = "none"
-
-    boardColor.style.display = "none";
-    boardColor1.style.display = "none";
-    boardColor2.style.display = "none";
-    zoombutton.style.display = "none";
+  boardColor.style.display = "none";
+  boardColor1.style.display = "none";
+  boardColor2.style.display = "none";
+  zoombutton.style.display = "none";
   
-//   namepageDiv.style.display = "none";
-//   startPageDiv.style.display = "none";
-//   gamePageDiv.style.display = "flex";
-//   gamePageMsgDiv.style.display = "flex";
-//   gamePagePiecesDiv.style.display = "flex";
-//   namepageCustoms.style.display = "none"
-//   settings.style.display = "flex";
-//   gamePageMainButton.style.display = "flex";
-//   boardColor.style.display = "none";
-//   boardColor1.style.display = "none";
-//   boardColor2.style.display = "none";
-  
-
-  
-
-
-
-function zoomButton ()
-{
-    clicksound.play()
-    if (zoominButton.style.display === "none" || zoomoutButton.style.display === "none")
-    {
-        zoominButton.style.display = "inline-block"
-        zoomoutButton.style.display = "inline-block"
-    }
-    else
-    {
-        zoominButton.style.display = "none"
-        zoomoutButton.style.display = "none"
-    }
-}
-
-zoomin = (e) =>
-{
-    let gamewidth = gamePageDiv.getBoundingClientRect().width
-    clicksound.play()
-    if(e.target.className)
-    {
-        gamePageDiv.getBoundingClientRect().width
-        if(gamewidth < 600)
-        {
-            gamewidth += 100;
-            gamewidth = gamewidth + "px"
-            gamePageDiv.style.width = gamewidth;
-            gamePageDiv.style.height = gamewidth;
-        }
-    };
-}
-
-const zoomout = (e) =>
-{
-    clicksound.play()
-    let gamewidth = gamePageDiv.getBoundingClientRect().width
-    if(e.target.className)
-    {
-        if(gamewidth > 100)
-        gamePageDiv.getBoundingClientRect().width
-        gamewidth -= 100;
-        gamewidth = gamewidth + "px"
-          gamePageDiv.style.width = gamewidth;
-          gamePageDiv.style.height = gamewidth;
-    };
-}
-
-function gamesettings(event)
-{
-    clicksound.play()
-    if((zoombutton.style.display === ""))
-    {
-        
-        boardColor.style.display = "none"
-        boardColor.style.display = "none"
-        boardColor1.style.display = "none"
-        boardColor2.style.display = "none"
-        zoombutton.style.display = "none";
-        zoominButton.style.display = "none";
-        zoomoutButton.style.display = "none";
-    }
-    else{
-        
-        boardColor.style.display = ""
-        zoombutton.style.display = ""
-    }
-     
-}
-
-
-zoominButton.addEventListener("click",zoomin)
-zoomoutButton.addEventListener("click",zoomout)
-
-
   /*----- functions -----*/
   init()
 
@@ -424,6 +322,7 @@ function userMoves(event)
 
     if (chkrClsClick === "possibleMove")
     {
+        // chesssound.play();
         removeBefore = 0;
         let removeCheckerRow = Math.floor((chkrRowClick + prevClickRow) / 2)
         let removeCheckerCol = Math.floor((chkrColClick + prevClickCol) / 2)
@@ -481,6 +380,7 @@ function userMoves(event)
         
     if (chkrClsClick === checkersProperty[turnVar])
     {
+        chesssound.play();
         boardArrVal.forEach( x => x.includes("possibleMove") ? clearPossibleMove() : 0)
         prevClickRow = chkrRowClick;
         prevClickCol = chkrColClick;
@@ -648,11 +548,7 @@ function getWinner()
 
 function goNamePage (event)
 {
-// gamePageDiv.style.display = "flex";
-// gamePageMsgDiv.style.display = "flex";
-// gamePagePiecesDiv.style.display = "flex";
-// startPageDiv.style.display = "none";
-clicksound.play()
+    clicksound.play()
     startPageDiv.style.display = "none";
     namepageDiv.style.display = "flex";
     gamePageDiv.style.display = "none";
@@ -808,17 +704,10 @@ function showHideCustom(event)
     }
 }
 
-
-
-
-
-
-
-
 function colorizeBackground()
 {
     let blackBoard = document.querySelectorAll(".blackbckgrd")
-let whiteBoard = document.querySelectorAll(".whitebckgrd")
+    let whiteBoard = document.querySelectorAll(".whitebckgrd")
     for(let i = 0 ; i < blackBoard.length ; i++)
     {
         blackBoard[i].style.backgroundColor =  boardColor1.value;
@@ -845,15 +734,84 @@ function hideShowBoardColor()
         boardColor1.style.display = "none"
         boardColor2.style.display = "none"
     }
-
 }
     
    
-   
+function zoomButton ()
+{
+    clicksound.play()
+    if (zoominButton.style.display === "none" || zoomoutButton.style.display === "none")
+    {
+        zoominButton.style.display = "inline-block"
+        zoomoutButton.style.display = "inline-block"
+    }
+    else
+    {
+        zoominButton.style.display = "none"
+        zoomoutButton.style.display = "none"
+    }
+}
+
+function zoomin (e)
+{
+    let gamewidth = gamePageDiv.getBoundingClientRect().width
+    clicksound.play()
+    if(e.target.className)
+    {
+        gamePageDiv.getBoundingClientRect().width
+        if(gamewidth < 600)
+        {
+            gamewidth += 100;
+            gamewidth = gamewidth + "px"
+            gamePageDiv.style.width = gamewidth;
+            gamePageDiv.style.height = gamewidth;
+        }
+    };
+}
+
+function zoomout(e)
+{
+    clicksound.play()
+    let gamewidth = gamePageDiv.getBoundingClientRect().width
+    if(e.target.className)
+    {
+        if(gamewidth > 100)
+        gamePageDiv.getBoundingClientRect().width
+        gamewidth -= 100;
+        gamewidth = gamewidth + "px"
+          gamePageDiv.style.width = gamewidth;
+          gamePageDiv.style.height = gamewidth;
+    };
+}
+
+function gamesettings(event)
+{
+    clicksound.play()
+    if((zoombutton.style.display === ""))
+    {
+        
+        boardColor.style.display = "none"
+        boardColor.style.display = "none"
+        boardColor1.style.display = "none"
+        boardColor2.style.display = "none"
+        zoombutton.style.display = "none";
+        zoominButton.style.display = "none";
+        zoomoutButton.style.display = "none";
+    }
+    else{
+        
+        boardColor.style.display = ""
+        zoombutton.style.display = ""
+    }
+     
+}
 
 
-
-
+function clearField (event)
+{
+event.target.style.color = "black"
+event.target.value = ""
+}
 
 
 
