@@ -123,18 +123,30 @@
     }
   }
 
+
 .gamepageMsg
 {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     font-size: 20px;
-    background-color: rgb(247, 201, 161);
+    color: #101820;
+    background-color: #FEE715;
     gap: 30px;
     height: 70px;
     width: 300px;
     border-radius: 10px;
+    animation: glow2 2s infinite alternate;
 }
+
+@keyframes glow2 {
+    from {
+      box-shadow: 0 0 5px -5px #00ff3c;
+    }
+    to {
+      box-shadow: 0 0 10px 10px #ffffff;
+    }
+  }
 
 .gamepageMsg div{
     /* gap: 30px; */
@@ -236,7 +248,8 @@ top: 0; */
 
  .gamepagePieces
  {
-    background-color: rgb(163, 207, 207);
+    background-color: #CADCFC;
+    color:#00246B;
     border-radius: 6px;
     height: 70px;
     width: 300px;
@@ -289,7 +302,8 @@ top: 0; */
     gap: 50px;
     justify-content: center;
     align-items:center;
-    opacity: 85%;
+    opacity: 80%;
+    border-radius: 20px;
 }
 
 
@@ -577,7 +591,7 @@ top: 0; */
 
 
 /* CSS */
-.zoomin,.zoomout,.colorpicker,.colorpicker1,.colorpicker2{
+.zoomin,.zoomout,.colorpicker,.colorpicker1,.colorpicker2,.zoombutton{
   appearance: none;
   background-color: #FAFBFC;
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -603,34 +617,34 @@ top: 0; */
   word-wrap: break-word;
 }
 
-.zoomin:hover,.zoomout:hover,.colorpicker:hover{
+.zoomin:hover,.zoomout:hover,.colorpicker:hover,.zoombutton:hover{
   background-color: #F3F4F6;
   text-decoration: none;
   transition-duration: 0.1s;
 }
 
-.zoomin:disabled,.zoomout:disabled,.colorpicker:disabled{
+.zoomin:disabled,.zoomout:disabled,.colorpicker:disabled,.zoombutton:disabled{
   background-color: #FAFBFC;
   border-color: rgba(27, 31, 35, 0.15);
   color: #959DA5;
   cursor: default;
 }
 
-.zoomin:active,.zoomout:active,.colorpicker:active{
+.zoomin:active,.zoomout:active,.colorpicker:active,.zoombutton:active{
   background-color: #EDEFF2;
   box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
   transition: none 0s;
 }
 
-.zoomin:focus,.zoomout:focus,.colorpicker:focus {
+.zoomin:focus,.zoomout:focus,.colorpicker:focus,.zoombutton:focus{
   outline: 1px transparent;
 }
 
-.zoomin:before,.zoomout:before,.colorpicker:before{
+.zoomin:before,.zoomout:before,.colorpicker:before,.zoombutton:before{
   display: none;
 }
 
-.zoomin:-webkit-details-marker,.zoomout:-webkit-details-marker,.colorpicker:-webkit-details-marker  {
+.zoomin:-webkit-details-marker,.zoomout:-webkit-details-marker,.colorpicker:-webkit-details-marker,.zoombutton:-webkit-details-marker {
   display: none;
 }
 
@@ -700,5 +714,12 @@ top: 0; */
   }
 
   
+ .gamepagebutton,.gamepageMsg
+ {
+    margin-top: 30px;
+ }
  
- 
+ .gamepagePieces
+ {
+    margin-bottom: 30px;
+ }

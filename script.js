@@ -38,6 +38,8 @@
   /*----- cached elements  -----*/
   //   main body
   let bodyMain = document.querySelector("body")
+  let clicksound = document.querySelector("#clicksound")
+
 
   //   Game page
   let gamePagePiecesDiv = document.querySelector(".gamepagePieces")
@@ -50,6 +52,7 @@
   let boardColor = document.querySelector(".colorpicker")
 let boardColor1 = document.querySelector("#colorpicker1")
 let boardColor2 = document.querySelector("#colorpicker2")
+let zoombutton = document.querySelector(".zoombutton")
   
     
   
@@ -73,6 +76,7 @@ let boardColor2 = document.querySelector("#colorpicker2")
   let namepageCusCols = document.querySelector(".namepageCusCols")
   let namepageMsg = document.querySelector(".namepageMsg")
   modeSelection[1].addEventListener("change",showHideCustom)
+  
 
   /*----- event listeners -----*/
   gamePageDiv.addEventListener("click",userMoves);
@@ -86,6 +90,7 @@ let boardColor2 = document.querySelector("#colorpicker2")
   boardColor.addEventListener("click",hideShowBoardColor)
   boardColor1.addEventListener("change",colorizeBackground)
   boardColor2.addEventListener("change",colorizeBackground)
+  zoombutton.addEventListener("click",zoomButton)
   
 
 
@@ -104,6 +109,7 @@ let boardColor2 = document.querySelector("#colorpicker2")
     boardColor.style.display = "none";
     boardColor1.style.display = "none";
     boardColor2.style.display = "none";
+    zoombutton.style.display = "none";
   
 //   namepageDiv.style.display = "none";
 //   startPageDiv.style.display = "none";
@@ -120,17 +126,29 @@ let boardColor2 = document.querySelector("#colorpicker2")
 
   
 
-//   ##### width ######
-//   gamePageDiv.style.width = "400px";
-//   gamePageDiv.style.height = "400px";
-//   console.log("here:",gamePageDiv.getBoundingClientRect().width)
 
-const zoomin = (e) =>
+
+function zoomButton ()
+{
+    clicksound.play()
+    if (zoominButton.style.display === "none" || zoomoutButton.style.display === "none")
+    {
+        zoominButton.style.display = "inline-block"
+        zoomoutButton.style.display = "inline-block"
+    }
+    else
+    {
+        zoominButton.style.display = "none"
+        zoomoutButton.style.display = "none"
+    }
+}
+
+zoomin = (e) =>
 {
     let gamewidth = gamePageDiv.getBoundingClientRect().width
+    clicksound.play()
     if(e.target.className)
     {
-        console.log("here:",gamePageDiv.getBoundingClientRect().width)
         gamePageDiv.getBoundingClientRect().width
         if(gamewidth < 600)
         {
@@ -139,42 +157,42 @@ const zoomin = (e) =>
             gamePageDiv.style.width = gamewidth;
             gamePageDiv.style.height = gamewidth;
         }
-        //   console.log("here:",gamePageDiv.getBoundingClientRect().width)
     };
 }
 
 const zoomout = (e) =>
 {
+    clicksound.play()
     let gamewidth = gamePageDiv.getBoundingClientRect().width
     if(e.target.className)
     {
         if(gamewidth > 100)
-        console.log("here:",gamePageDiv.getBoundingClientRect().width)
         gamePageDiv.getBoundingClientRect().width
         gamewidth -= 100;
         gamewidth = gamewidth + "px"
           gamePageDiv.style.width = gamewidth;
           gamePageDiv.style.height = gamewidth;
-        //   console.log("here:",gamePageDiv.getBoundingClientRect().width)
     };
 }
 
 function gamesettings(event)
 {
-    if((zoominButton.style.display === "" || zoomoutButton.style.display === ""))
+    clicksound.play()
+    if((zoombutton.style.display === ""))
     {
-        zoominButton.style.display = "none"
-        zoomoutButton.style.display = "none"
-        boardColor.style.display = "none"
         
+        boardColor.style.display = "none"
         boardColor.style.display = "none"
         boardColor1.style.display = "none"
         boardColor2.style.display = "none"
+        zoombutton.style.display = "none";
+        zoominButton.style.display = "none";
+        zoomoutButton.style.display = "none";
     }
     else{
-        zoominButton.style.display = ""
-        zoomoutButton.style.display = ""
+        
         boardColor.style.display = ""
+        zoombutton.style.display = ""
     }
      
 }
@@ -192,6 +210,7 @@ zoomoutButton.addEventListener("click",zoomout)
     let checkersLength = gamePageDiv.children.length;
     if (checkersLength !== 0)
     {for(let i = 0 ; i < checkersLength ; i++) {gamePageDiv.children[0].remove()}}
+    clicksound.play();
     initBoard();
 
     for (let i = 0 ;i < boardRowLen;i++)
@@ -235,7 +254,6 @@ function renderMessage()
         turnIdx = turnVar;
         Math.abs(turnVar) === 2 ? turnIdx = (turnIdx / 2): turnIdx;
         gamePageMsgDiv.children[0].setAttribute("class",checkersProperty[turnIdx])
-        console.log(gamePageMsgDiv.children[0])
         gamePageMsgDiv.children[1].innerHTML =  playersName[turnIdx] + " turn! "
     }
     else if (Math.abs(winner) === 1)
@@ -250,7 +268,6 @@ function renderMessage()
     let piecesUpdate = gamePagePiecesDiv.children;
     for(let i = 0 ; i< piecesUpdate.length;i++)
     {
-        console.log(piecesUpdate[i].children[0].className)
         for(let items in checkersProperty)
         {
             if(piecesUpdate[i].children[0].className === checkersProperty[items])
@@ -407,11 +424,9 @@ function userMoves(event)
         {
             if ((removeCheckerRow === jumpedOver[i][0]) && (removeCheckerCol === jumpedOver[i][1]))
             {
-                console.log("###",jumpedOver[i][0],jumpedOver[i][1],checkersProperty[turnVar * -1],turnVar)
                 if (boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[turnVar * -1] || boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] === checkersProperty[internalTurn * -1])
                 {
                     boardArrVal[jumpedOver[i][0]][jumpedOver[i][1]] = "null"
-                    console.log("jumped over ################## indeeeed remove")
                 } 
                 delete jumpedOver[i];
                 jumpedOver.pop()
@@ -435,14 +450,10 @@ function userMoves(event)
         {
             boardArrVal[chkrRowClick][chkrColClick] += "isKing"
         }
-        console.log("removeBefore is :",removeBefore)
         if (removeBefore)
-        {
-            console.log("kings move is ?",kingMoves)
-            console.log("turnvar?>:",turnVar)            
+        {          
             let test = computePosMoves(turnVar,chkrRowClick,chkrColClick,1)
 
-            console.log("test",test)
 
             if (test !== 0)
             {
@@ -479,21 +490,18 @@ function computePosMoves (turns,row,col,kingsMove)
     {
         length = 2;
         initial = -1;
-        // console.log("turns:",turns,initial,length)
 
     }
     else if (turns === 1)
     {
         length = 0;
         initial = -1;
-        // console.log("turns:",turns,initial,length)
 
     }
     else if (turns === -1)
     {
         length = 2;
         initial = 1;
-        // console.log("turns:",turns,initial,length)
     }
 
     for(let j = initial ; j < length ; j++)    
@@ -515,7 +523,6 @@ function computePosMoves (turns,row,col,kingsMove)
                 Math.abs(internalTurn) === 1 ? internalTurn *= 2: internalTurn /= 2;
                 let normalCheckers = "" + checkersProperty[turns * -1];
                 let kingCheckers = "" + checkersProperty[internalTurn * -1];
-                console.log("vs",checkerPosMove,normalCheckers,kingCheckers)
 
                 if (checkerPosMove === "null" && kingsMove === 0)
                 {
@@ -525,7 +532,6 @@ function computePosMoves (turns,row,col,kingsMove)
 
                 else if (checkerPosMove === normalCheckers ||checkerPosMove === kingCheckers)
                 {
-                    console.log("cant find?")
                     jumpedOver.push([curRow,curCol])
                     let findPosRol = curRow + (curRow - intPreClickRol);
                     let findPosCol = curCol + (curCol - intPreClickCol);
@@ -637,6 +643,7 @@ function goNamePage (event)
 // gamePageMsgDiv.style.display = "flex";
 // gamePagePiecesDiv.style.display = "flex";
 // startPageDiv.style.display = "none";
+clicksound.play()
     startPageDiv.style.display = "none";
     namepageDiv.style.display = "flex";
     gamePageDiv.style.display = "none";
@@ -646,6 +653,7 @@ function goNamePage (event)
 }
 function startPage (event)
 {
+    clicksound.play()
     gamePageDiv.style.display = "none";
     gamePageMsgDiv.style.display = "none";
     gamePagePiecesDiv.style.display = "none";
@@ -660,17 +668,19 @@ function startPage (event)
     boardColor2.style.display = "none";
     zoominButton.style.display = "none";
     zoomoutButton.style.display = "none";
+    zoombutton.style.display = "none";
 }
  
 function startGame(event)
 {
-    
+    clicksound.play()
 let inputBox1 = namePageInputBox1.value;
 let inputBox2 = namePageInputBox2.value;
 let gameMode = modeSelection[1].value;
 
 if (event.target.className === "playbutton")
 {
+    clicksound.play()
     if (inputBox1 === "" || inputBox2 === "" || getgameMode(gameMode) === false)
     {
         namePageInputBox1.value = "Cannot be blank!"
@@ -794,11 +804,8 @@ function colorizeBackground()
 {
     let blackBoard = document.querySelectorAll(".blackbckgrd")
 let whiteBoard = document.querySelectorAll(".whitebckgrd")
-    console.log("test")
     for(let i = 0 ; i < blackBoard.length ; i++)
     {
-        console.log(boardColor1.value)
-        console.log(blackBoard[i])
         blackBoard[i].style.backgroundColor =  boardColor1.value;
     }
     for(let i = 0 ; i < whiteBoard.length ; i++)
@@ -812,6 +819,7 @@ let whiteBoard = document.querySelectorAll(".whitebckgrd")
 
 function hideShowBoardColor()
 {
+    clicksound.play()
     if(boardColor1.style.display === "none" || boardColor1.style.display === "none")
     {
         boardColor1.style.display = ""
