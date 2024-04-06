@@ -58,6 +58,7 @@
     justify-content: center;
     flex-direction: column;
     gap:10px;
+    margin: 0;
 }
 
 .blackChess
@@ -513,7 +514,6 @@ top: 0; */
 
 
 
-
 /* CSS */
 .mainpage {
   padding: 0.6em 2em;
@@ -722,3 +722,13 @@ top: 0; */
  {
     margin-bottom: 30px;
  }
+
+
+
+ @media (min-width: 600px) {
+    * {
+      font-size: 50%;
+      height: 75%;
+      width:75%;
+    }
+  }
