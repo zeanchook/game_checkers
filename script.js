@@ -1,6 +1,6 @@
   /*----- constants -----*/
-  const rowMAX = 20;
-  const colMAX = 20;
+  const rowMAX = 50;
+  const colMAX = 50;
   const rowMIN = 4;
   const colMIN = 2;
   let checkersProperty = 
@@ -50,9 +50,9 @@
   let zoomoutButton = document.querySelector(".zoomout")
   let settings = document.querySelector(".settings")
   let boardColor = document.querySelector(".colorpicker")
-let boardColor1 = document.querySelector("#colorpicker1")
-let boardColor2 = document.querySelector("#colorpicker2")
-let zoombutton = document.querySelector(".zoombutton")
+  let boardColor1 = document.querySelector("#colorpicker1")
+  let boardColor2 = document.querySelector("#colorpicker2")
+  let zoombutton = document.querySelector(".zoombutton")
   
     
   
@@ -91,6 +91,15 @@ let zoombutton = document.querySelector(".zoombutton")
   boardColor1.addEventListener("change",colorizeBackground)
   boardColor2.addEventListener("change",colorizeBackground)
   zoombutton.addEventListener("click",zoomButton)
+  namePageInputBox1.addEventListener("click",clearField)
+  namePageInputBox2.addEventListener("click",clearField)
+
+  function clearField (event)
+  {
+    event.target.style.color = "black"
+    event.target.value = ""
+  }
+  
   
 
 
@@ -681,15 +690,14 @@ let gameMode = modeSelection[1].value;
 if (event.target.className === "playbutton")
 {
     clicksound.play()
-    if (inputBox1 === "" || inputBox2 === "" || getgameMode(gameMode) === false)
+    if (inputBox1 === "" || inputBox2 === "")
     {
         namePageInputBox1.value = "Cannot be blank!"
         namePageInputBox1.style.color = "red"
         namePageInputBox2.value = "Cannot be blank!"
         namePageInputBox2.style.color = "red"
-        
     }
-    else if (inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!")
+    else if ((inputBox1 !== "Cannot be blank!" || inputBox2 !== "Cannot be blank!") && getgameMode(gameMode) !== false)
     {
         playersName[1] = inputBox1
         playersName[-1] = inputBox2
@@ -762,6 +770,13 @@ if (event.target.className === "playbutton")
             else if(customCols > rowMAX)
             {
                 namepageMsg.innerHTML = "The Maximum Rows Value is " + rowMAX;
+                return false;
+            }
+            else if (typeof(parseInt(customCols)) !== "number" || typeof(parseInt(customRows)) !== "number")
+            {
+                console.log(customCols,customRows)
+                console.log(typeof(customCols),typeof(customRows))
+                namepageMsg.innerHTML = "Please only input numbers!";
                 return false;
             }
             else
