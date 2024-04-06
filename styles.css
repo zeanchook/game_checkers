@@ -722,13 +722,3 @@ top: 0; */
  {
     margin-bottom: 30px;
  }
-
-
-
- @media (min-width: 600px) {
-    * {
-      font-size: 50%;
-      height: 75%;
-      width:75%;
-    }
-  }
