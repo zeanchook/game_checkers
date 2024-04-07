@@ -72,8 +72,8 @@ A player who captures all their opponents' checkers wins. Players continue jumpi
 
 ### Future Development
 
-- [] add timer as a factor to decide player's win/lose.
-- [] computer can be one of the player option.
+- Add timer as a factor to decide player's win/lose.
+- Computer can be one of the player option.
 
 ### Summary
 
