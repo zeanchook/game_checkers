@@ -17,6 +17,7 @@
   let jumpedOver = [];
   let currentPlayerMoves = 0;
   let turnVar;
+  let jumpBef = 0;
   let checkersProperty = 
   {
     "1": "blackChess",
@@ -363,19 +364,23 @@ function userMoves(event)
             if (checkMoves !== 0)
             {
                 turnVar = turnVar;
+                jumpBef = 1;
             }
             else{
                 turnVar *= -1;
+                jumpBef = 0;
             }         
         }
         else if(removeBefore === 0)
         {
             turnVar *= -1;
+            jumpBef = 0;
         }
-        currentPlayerMoves = 1;       
+        currentPlayerMoves = 1;  
+        render();     
     }
         
-    if (chkrClsClick === checkersProperty[turnVar])
+    if (chkrClsClick === checkersProperty[turnVar] && jumpBef === 0)
     {
         chesssound.play();
         boardArrVal.forEach( x => x.includes("possibleMove") ? clearPossibleMove() : 0)
@@ -383,7 +388,11 @@ function userMoves(event)
         prevClickCol = chkrColClick;
         computePosMoves(turnVar,chkrRowClick,chkrColClick,0)
     }
-    render();
+    if(jumpBef ===0)
+    {
+        render();
+    }
+    
 }
 
 function computePosMoves (turns,row,col,kingsMove)
@@ -771,7 +780,6 @@ function clearField (event)
     event.target.style.color = "black"
     event.target.value = ""
 }
-
 
 
 
