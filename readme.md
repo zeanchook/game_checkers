@@ -51,7 +51,7 @@ A player who captures all their opponents' checkers wins. Players continue jumpi
 
 ## Getting Started
 
-![Game](images/inputbox.png)
+![Game](Images/inputbox.png)
 
     1. Players have the option to input their names into the designated input boxes for Player 1 and Player 2.
     2. They can also select their preferred game mode, which includes options such as:
@@ -68,7 +68,7 @@ A player who captures all their opponents' checkers wins. Players continue jumpi
     7. They can also click the "main page" button to return to the main page and customize their checker board.
     8. Moreover, players have the option to customize the board size by clicking the zoom button. They can also personalize the board color to match their preferences.
 
-![Game](images/settings.png)
+![Game](Images/settings.png)
 
 ### Future Development
 
