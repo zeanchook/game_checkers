@@ -304,6 +304,8 @@ function userMoves(event)
 
     for(let itemsInside in checkersProperty)
     {
+        if(isNaN(chkrRowClick) === false && isNaN(chkrRowClick) === false)
+        {
         if (checkersProperty[itemsInside] === boardArrVal[chkrRowClick][chkrColClick])
         {
             if(Math.abs(turnVar) === 2 && Math.abs(itemsInside) === 1)
@@ -315,6 +317,7 @@ function userMoves(event)
                 turnVar *= 2;
             }
         }
+    }
     }
 
     if (chkrClsClick === "possibleMove")
